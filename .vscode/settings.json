@@ -1,0 +1,31 @@
+{
+  // Testy uruchamiamy przez pytest - obsługuje on takze klasy unittest.TestCase.
+  // Aby uzywac wlasnego runnera unittest, ustaw pytestEnabled na false
+  // i unittestEnabled na true.
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": ["src"],
+  "python.testing.cwd": "${workspaceFolder}",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.extraPaths": [
+    "src/01-OOP",
+    "src/01-OOP/01-class-vs-object/examples",
+    "src/01-OOP/01-class-vs-object/exercises",
+    "src/01-OOP/02-encapsulation-property/examples",
+    "src/01-OOP/02-encapsulation-property/exercises",
+    "src/01-OOP/03-composition/examples",
+    "src/01-OOP/03-composition/exercises",
+    "src/01-OOP/04-inheritance-polymorphism/examples",
+    "src/01-OOP/04-inheritance-polymorphism/exercises",
+    "src/01-OOP/05-aaa-pattern/examples",
+    "src/01-OOP/05-aaa-pattern/exercises",
+    "src/01-OOP/06-unit-test-anatomy/examples",
+    "src/01-OOP/06-unit-test-anatomy/exercises",
+    "src/01-OOP/07-testing-frameworks/examples",
+    "src/01-OOP/07-testing-frameworks/exercises"
+  ],
+  "files.encoding": "utf8",
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true
+}

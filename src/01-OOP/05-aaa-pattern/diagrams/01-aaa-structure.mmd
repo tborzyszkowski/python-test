@@ -1,0 +1,18 @@
+%% Diagram: struktura AAA - temat 05
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+flowchart TD
+    T["Jeden test = jedna wlasnosc"] --> A["ARRANGE<br/>przygotuj dane i stan<br/>utworz obiekty, fixture"]
+    A --> AC["ACT<br/>wykonaj JEDNA operacje<br/>jedno wywolanie pod testem"]
+    AC --> AS["ASSERT<br/>sprawdz wynik<br/>jedna asercja = jedna przyczyna porazki"]
+    AS --> OK{"Assert przechodzi?"}
+    OK -->|tak| P["test PASSED"]
+    OK -->|nie| F["test FAILED<br/>czytelny komunikat wskazuje faze"]
+
+    A -.->|"zly sygnal"| BAD1["Setup wymieszany z akcja<br/>lub stan wspoldzielony miedzy testami"]
+    AC -.->|"zly sygnal"| BAD2["Kilka niezaleznych akcji<br/>w jednym tescie"]
+    AS -.->|"zly sygnal"| BAD3["Brak asercji / asercja na implementacje<br/>wiele asercji bez zwiazku"]
+
+    classDef good fill:#e8f5e9,stroke:#2e7d32
+    classDef bad fill:#ffebee,stroke:#c62828
+    class A,AC,AS,P good
+    class BAD1,BAD2,BAD3,F bad

@@ -1,0 +1,33 @@
+%% Diagram: porownanie unittest i pytest - temat 07
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+flowchart TB
+    CODE["Kod produkcyjny<br/>Calculator / parse_number / string_utils"]
+
+    subgraph UNI["unittest (biblioteka standardowa)"]
+        U1["class TestX(unittest.TestCase)"]
+        U2["metody test_*<br/>self.assertEqual(a, b)"]
+        U3["setUp / setUpClass / tearDown"]
+        U4["subTest - parametryzacja w tescie"]
+        U5["python -m unittest discover"]
+    end
+
+    subgraph PYT["pytest (biblioteka zewnetrzna)"]
+        P1["funkcje test_* na poziomie modulu"]
+        P2["zwykly assert a == b<br/>przepisywany (assertion rewriting)"]
+        P3["@pytest.fixture + yield"]
+        P4["@pytest.mark.parametrize<br/>osobny wynik dla kazdego przypadku"]
+        P5["pytest -k / --pdb / --cov / wtyczki"]
+    end
+
+    CODE --> UNI
+    CODE --> PYT
+
+    U1 -.->|"pytest uruchamia klasy TestCase bez zmian"| P5
+    P4 -.->|"unittest NIE widzi funkcji test_*"| U5
+
+    classDef code fill:#e3f2fd,stroke:#1565c0
+    classDef uni fill:#fff8e1,stroke:#f9a825
+    classDef pyt fill:#e8f5e9,stroke:#2e7d32
+    class CODE code
+    class U1,U2,U3,U4,U5 uni
+    class P1,P2,P3,P4,P5 pyt

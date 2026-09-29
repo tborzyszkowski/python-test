@@ -1,0 +1,30 @@
+%% Diagram: hermetyzacja i wlasciwosci - temat 02
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+classDiagram
+    class Point {
+        -_x : float
+        -_y : float
+        +x : float
+        +y : float
+        +magnitude : float
+        +distance_to(other) : float
+        +__eq__(other) : bool
+        +__repr__() : str
+    }
+
+    class Segment {
+        -_start : Point
+        -_end : Point
+        +start : Point
+        +end : Point
+        +length : float
+        +midpoint : Point
+        +slope : float
+        +is_degenerate : bool
+        +contains(point, eps) : bool
+    }
+
+    Segment *-- "2" Point : kompozycja
+    Point ..> Point : distance_to()
+    note for Point "x, y: wlasciwosci z walidacja w setterze; magnitude: wyliczana, tylko do odczytu"
+    note for Segment "Segment nie dziedziczy po Point - ZAWIERA dwa punkty; length i midpoint sa wyliczane"

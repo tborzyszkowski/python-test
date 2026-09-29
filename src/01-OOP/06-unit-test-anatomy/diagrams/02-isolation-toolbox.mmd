@@ -1,0 +1,22 @@
+%% Diagram: narzedzia izolacji testow w pytest - temat 06
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+flowchart LR
+    T["Test jednostkowy"] --> R{"Od czego zalezy<br/>wynik testu?"}
+    R -->|"zmienne srodowiskowe"| E["monkeypatch.setenv / delenv<br/>przywraca wartosc po tescie"]
+    R -->|"system plikow"| F["tmp_path<br/>unikalny katalog, sprzatany automatycznie"]
+    R -->|"losowosc"| L["monkeypatch.setattr na random<br/>albo random.seed(42)"]
+    R -->|"czas / strefa czasowa"| C["monkeypatch.setattr na datetime<br/>klasa z zamrozonym now()"]
+    R -->|"stan klasowy / globalny"| S["fixture autouse=True<br/>reset przed i po tescie"]
+    R -->|"zaleznosc zewnetrzna (HTTP, baza)"| D["test double: fake / stub / spy<br/>wstrzyknieta przez konstruktor (temat 03)"]
+
+    E --> OK["TEST DETERMINISTYCZNY<br/>dziala lokalnie i na CI"]
+    F --> OK
+    L --> OK
+    C --> OK
+    S --> OK
+    D --> OK
+
+    classDef tool fill:#fff3e0,stroke:#ef6c00
+    classDef ok fill:#e8f5e9,stroke:#2e7d32
+    class E,F,L,C,S,D tool
+    class OK ok

@@ -1,0 +1,25 @@
+%% Diagram: dynamiczne wiazanie metody (polimorfizm) - temat 04
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+sequenceDiagram
+    autonumber
+    participant K as ToolKit.use_all("deska")
+    participant B as Broom
+    participant D as Driller
+    participant N as Knife
+
+    K->>B: tool.use("deska")
+    B->>B: is_broken? nie
+    B->>B: durability -= 1
+    B-->>K: "Zamiatam deska"
+
+    K->>D: tool.use("deska")
+    D->>D: is_broken? nie
+    D->>D: durability -= 5
+    D-->>K: "Wierce otwor 8 mm w deska"
+
+    K->>N: tool.use("deska")
+    N->>N: is_broken? nie
+    N->>N: durability -= 2
+    N-->>K: "Ciecie deska ostrzem 12 cm"
+
+    Note over K,N: ten sam kod klienta, trzy rozne zachowania<br/>wybrane dynamicznie na podstawie typu obiektu

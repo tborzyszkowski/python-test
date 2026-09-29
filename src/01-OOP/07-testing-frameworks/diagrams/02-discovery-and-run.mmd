@@ -1,0 +1,28 @@
+%% Diagram: jak kazdy framework znajduje i uruchamia testy - temat 07
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+flowchart LR
+    subgraph CMD["Komenda"]
+        A["python -m unittest discover<br/>-p 'test*.py'"]
+        B["python -m pytest<br/>(testpaths z pytest.ini)"]
+    end
+
+    subgraph DISC["Co zostaje zebrane"]
+        A2["tylko klasy dziedziczace po<br/>unittest.TestCase<br/>(metody zaczynajace sie od 'test')"]
+        B2["funkcje test_* na poziomie modulu<br/>+ klasy Test*<br/>+ klasy unittest.TestCase"]
+    end
+
+    subgraph RUN["Jak raportuje wynik"]
+        A3["TextTestRunner<br/>OK / FAILED (failures=N)<br/>self.assertEqual -> 5 != 6"]
+        B3["Assertion rewriting<br/>wartosci posrednie w komunikacie<br/>osobny wpis na kazdy parametr"]
+    end
+
+    A --> A2 --> A3
+    B --> B2 --> B3
+
+    A2 -.->|"proba uruchomienia pliku w stylu pytest"| X["0 testow - brak dziedziczenia po TestCase"]
+    B2 -.->|"bez problemu"| Y["Uruchamia oba style w jednym przebiegu"]
+
+    classDef warn fill:#ffebee,stroke:#c62828
+    classDef ok fill:#e8f5e9,stroke:#2e7d32
+    class X warn
+    class Y ok

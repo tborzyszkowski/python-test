@@ -1,0 +1,26 @@
+%% Diagram: co robi pytest przy uruchomieniu testu (AAA w praktyce) - temat 05
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+sequenceDiagram
+    autonumber
+    participant P as pytest
+    participant FX as fixture
+    participant T as funkcja testowa
+    participant SUT as kod produkcyjny
+
+    P->>P: zbierz pliki test_*.py
+    P->>T: wywolaj test_length_of_triangle
+    Note over T: ARRANGE
+    P->>FX: rozwiaz fixture `triangle` (jesli test jej uzywa)
+    FX->>FX: Segment(Point(0,0), Point(3,4))
+    FX-->>T: gotowy obiekt
+    Note over T: ACT
+    T->>SUT: segment.length
+    SUT-->>T: 5.0
+    Note over T: ASSERT
+    T->>T: assert length == pytest.approx(5.0)
+    alt asercja prawdziwa
+        T-->>P: PASSED
+    else asercja falszywa
+        T-->>P: FAILED + raport z wartosciami
+        Note over P: --tb=short pokazuje linie asercji<br/>--pdb zatrzymuje debugger w miejscu porazki
+    end

@@ -1,0 +1,38 @@
+%% Diagram: kompozycja - temat 03
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+classDiagram
+    class Player {
+        +name : str
+        +wallet : Wallet
+        +backpack : Backpack
+        +gold : int
+        +total_weight : float
+        +pick_up(item) None
+        +buy(item, price) None
+    }
+
+    class Wallet {
+        -_gold : int
+        +gold : int
+        +deposit(amount) int
+        +withdraw(amount) int
+    }
+
+    class Backpack {
+        +capacity_kg : float
+        +total_weight : float
+        +is_overloaded : bool
+        +add(item) None
+        +remove(name) Item
+    }
+
+    class Item {
+        +name : str
+        +weight_kg : float
+    }
+
+    Player *-- "1" Wallet : kompozycja
+    Player *-- "1" Backpack : kompozycja
+    Backpack o-- "0..*" Item : agregacja
+    note for Player "Player NIE dziedziczy po Wallet ani Backpack - po prostu je MA"
+    note for Player "total_weight deleguje do backpack.total_weight"

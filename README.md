@@ -1,2 +1,213 @@
+<p align="left">
+  <a href="#wykorzystanie-ai-w-materiałach">
+    <kbd style="background-color: #0056b3; color: white; padding: 5px 10px; border-radius: 4px; font-weight: bold; border: none; font-family: sans-serif; font-size: 13px;">🤖 AI-Assisted</kbd>
+    <kbd style="background-color: #6c757d; color: white; padding: 5px 10px; border-radius: 4px; font-weight: bold; border: none; font-family: sans-serif; font-size: 13px;">Edukacja</kbd>
+  </a>
+</p>
+
 # python-test
-Materiały do zajęć z testów z pythonie
+
+Materiały dydaktyczne do kursu **testowania programów w Pythonie 3**.
+
+Repozytorium zawiera moduły wykładowe dotyczące budowania testowalnego kodu:
+od konstrukcji programowania obiektowego, przez wzorce projektowe ułatwiające
+testowanie, aż do frameworków testów jednostkowych (`unittest`, `pytest`).
+
+## Wymagania
+
+- Python **3.11** lub nowszy (zalecany 3.13) — [python.org](https://www.python.org/downloads/)
+- Nie jest wymagana żadna zewnętrzna instalacja poza standardowym Pythonem
+  (do testów wystarczy `pytest` instalowany skryptem `scripts/setup_venv.*`)
+
+## Szybki start
+
+### 1. Sklonuj repozytorium
+
+```bash
+git clone https://github.com/<user>/python-test.git
+cd python-test
+```
+
+### 2. Utwórz i aktywuj środowisko wirtualne
+
+**Windows (PowerShell):**
+
+```powershell
+# Jednorazowa konfiguracja (tworzy .venv i instaluje zależności)
+.\scripts\setup_venv.ps1
+
+# Aktywacja w bieżącej sesji
+.\.venv\Scripts\Activate.ps1
+```
+
+**Linux / macOS / Git Bash:**
+
+```bash
+bash scripts/setup_venv.sh
+source .venv/bin/activate
+```
+
+**Ręcznie (każdy system):**
+
+```bash
+python -m venv .venv
+# Windows:
+.venv\Scripts\pip install -r requirements.txt
+# Linux/macOS:
+.venv/bin/pip install -r requirements.txt
+```
+
+### 3. Uruchom testy
+
+```powershell
+# Z katalogu głównego projektu (Windows):
+.venv\Scripts\python.exe -m pytest src\01-OOP -c src\01-OOP\pytest.ini -v
+
+# Z pokryciem kodu (coverage):
+.venv\Scripts\python.exe -m pytest src\01-OOP -c src\01-OOP\pytest.ini --cov=src --cov-report=term-missing
+```
+
+```bash
+# Po aktywacji venv (każdy system):
+python -m pytest src/01-OOP -c src/01-OOP/pytest.ini -v
+```
+
+### 4. Wygeneruj diagramy PNG z plików Mermaid
+
+Diagramy w repozytorium są przechowywane jako pliki tekstowe `.mmd` (Mermaid)
+w katalogach `diagrams/` każdego tematu. Renderowanie do PNG:
+
+```powershell
+# Użyje lokalnego mmdc (jeśli jest zainstalowany), a w przeciwnym razie
+# usługi online (kroki.io, potem mermaid.ink) - wymaga połączenia z Internetem
+.venv\Scripts\python.exe src\01-OOP\generate_diagrams.py
+
+# Tylko wybrane tematy / nadpisanie istniejących plików PNG:
+.venv\Scripts\python.exe src\01-OOP\generate_diagrams.py --only 05-aaa-pattern --force
+```
+
+> **Wskazówka:** pliki `.mmd` (oraz bloki ```mermaid``` w plikach `README.md`)
+> można podglądać bez generowania PNG — wystarczy rozszerzenie
+> *Markdown Preview Mermaid Support* w Visual Studio Code.
+
+### 5. Praca w Visual Studio Code
+
+Repozytorium zawiera gotową konfigurację katalogu `.vscode/`, więc po otwarciu
+folderu wystarczy:
+
+1. Wskazać interpreter z `.venv` (`Ctrl+Shift+P` → *Python: Select Interpreter*).
+2. Otworzyć panel **Testing** (ikona kolby) — pytest wykryje wszystkie testy
+   (ponad 330 przypadków) i pozwoli uruchamiać oraz debugować pojedyncze
+   pozycje bez wpisywania komend.
+3. Nacisnąć `F5`, aby uruchomić jedną z gotowych konfiguracji:
+   `Python: bieżący plik`, `Python: pytest (moduł 01-OOP)`,
+   `Python: pytest (bieżący plik)`, `Python: pytest (zatrzymaj się przy porażce)`
+   oraz `Python: unittest (przykłady tematu 07)`.
+4. Zainstalować zalecane rozszerzenia (VS Code zaproponuje je automatycznie) —
+   w szczególności *Markdown Preview Mermaid Support*, żeby diagramy w plikach
+   `README.md` renderowały się w podglądzie.
+
+## Moduły kursu
+
+- [`src/01-OOP/README.md`](src/01-OOP/README.md) - programowanie obiektowe w kontekście testowalności
+  (klasa vs obiekt, hermetyzacja i `@property`, kompozycja, dziedziczenie i polimorfizm)
+  oraz wprowadzenie do testów jednostkowych (AAA, `unittest`, `pytest`)
+
+## Jak wybrać temat na start?
+
+Dla studentów, którzy znają już podstawy Pythona, polecana kolejność pracy:
+
+1. **`01-OOP/01-class-vs-object`** - klasa a obiekt/instancja, pola i metody instancyjne, statyczne i klasowe.
+2. **`01-OOP/02-encapsulation-property`** - hermetyzacja i `@property` na przykładzie klas `Point` i `Segment`.
+3. **`01-OOP/03-composition`** - kompozycja i wstrzykiwanie zależności - fundament testowalności.
+4. **`01-OOP/04-inheritance-polymorphism`** - dziedziczenie i polimorfizm (`Tool`, `Broom`, `Driller`, `Knife`).
+5. **`01-OOP/05-aaa-pattern`** - struktura Arrange - Act - Assert.
+6. **`01-OOP/06-unit-test-anatomy`** - jak sformułować test jednostkowy jednej własności.
+7. **`01-OOP/07-testing-frameworks`** - porównanie `unittest` i `pytest` na tym samym kodzie.
+
+Sugerowany rytm nauki:
+
+- najpierw przeczytaj `README.md` wybranego tematu,
+- uruchom przykłady z `examples/`,
+- na końcu rozwiąż zadania z `exercises/` i sprawdź je testami `pytest`.
+
+## Struktura projektu
+
+```
+python-test/
+├── .vscode/                      # konfiguracja VS Code (testy, debugowanie, Mermaid)
+│   ├── launch.json               # gotowe konfiguracje F5 (plik, pytest, unittest)
+│   ├── settings.json             # Test Explorer, ścieżki importów, kodowanie UTF-8
+│   └── extensions.json           # zalecane rozszerzenia (Python, Pylance, Mermaid)
+├── .venv/                        # środowisko wirtualne (ignorowane przez git)
+├── requirements.txt              # zależności projektu
+├── pyproject.toml                # konfiguracja narzędzi (pytest, coverage, ruff, mypy)
+├── scripts/
+│   ├── setup_venv.ps1            # skrypt konfiguracyjny (Windows PowerShell)
+│   └── setup_venv.sh             # skrypt konfiguracyjny (Linux/macOS)
+└── src/
+    └── 01-OOP/
+        ├── README.md             # przegląd modułu i scenariusz wykładu
+        ├── pytest.ini            # konfiguracja pytest dla modułu
+        ├── conftest.py           # wspólne fixture'y i ścieżki importów
+        ├── generate_diagrams.py  # generator PNG z plików .mmd
+        ├── 01-class-vs-object/
+        │   ├── README.md         # teoria + mini-lab + literatura
+        │   ├── diagrams/         # diagramy Mermaid (.mmd) + wygenerowane .png
+        │   ├── examples/         # uruchamialny kod demonstrujący koncepcje
+        │   └── exercises/        # zadania, rozwiązania i testy zadań
+        ├── 02-encapsulation-property/
+        ├── 03-composition/
+        ├── 04-inheritance-polymorphism/
+        ├── 05-aaa-pattern/
+        ├── 06-unit-test-anatomy/
+        └── 07-testing-frameworks/
+```
+
+Każdy katalog tematyczny zawiera:
+
+- `README.md` - teoria, przykłady kodu, diagramy Mermaid, zadania i literatura,
+- `diagrams/` - pliki `.mmd` (Mermaid) z diagramami objaśniającymi kod i pojęcia,
+- `examples/` - uruchamialny kod demonstrujący koncepcje (część plików to gotowe testy),
+- `exercises/` - treści zadań (`tasks_XX.py`), rozwiązania (`solutions_XX.py`) i testy rozwiązań.
+
+> W tematach 05-07 (`05-aaa-pattern`, `06-unit-test-anatomy`,
+> `07-testing-frameworks`) zadaniem studenta jest **napisanie testów**, dlatego
+> rozwiązaniem jest tam plik `exercises/test_solutions_XX.py`, a kod produkcyjny
+> dostarczany jest w gotowej postaci (`shopping_cart.py`, `string_utils.py`).
+
+## Zależności
+
+| Pakiet      | Wersja  | Opis                                     |
+|-------------|---------|------------------------------------------|
+| pytest      | ≥ 7.4   | framework do testów jednostkowych        |
+| pytest-cov  | ≥ 4.1   | pokrycie kodu testami (`coverage`)       |
+
+## Konwencje w repozytorium
+
+- Każdy temat w osobnym katalogu o nazwie `NN-nazwa-tematu`.
+- Każdy przykład da się uruchomić samodzielnie: `python examples/nazwa.py`.
+- Wszystkie testy to pliki `test_*.py` z unikalnymi nazwami (moduły `examples/`
+  i `exercises/` trafiają na `sys.path` przez `src/01-OOP/conftest.py`).
+- Diagramy trzymamy w Mermaid (`.mmd`), bo są czytelne w diffach Git.
+
+## Licencja
+
+Materiały objęte licencją **CC BY-NC 4.0** — szczegóły w pliku [LICENSE.md](LICENSE.md).
+
+## Wykorzystanie AI w materiałach
+
+Materiały dydaktyczne zawarte w tym repozytorium są przygotowywane przy wsparciu
+narzędzi sztucznej inteligencji (Generative AI), które pełnią rolę asystenta twórcy.
+
+Sztuczna inteligencja jest wykorzystywana w celach pomocniczych, w szczególności do:
+
+- Współtworzenia i optymalizacji bazowych przykładów kodu oraz konfiguracji.
+- Formatowania, strukturyzacji oraz automatyzacji generowania dokumentacji.
+- Wsparcia procesu redakcyjnego, korekty językowej oraz generowania alternatywnych
+  wyjaśnień pojęć technicznych.
+
+Wszystkie materiały, schematy oraz kody źródłowe podlegają **weryfikacji
+merytorycznej i edycji przez człowieka**. Ostateczna treść oraz układ dydaktyczny
+są wynikiem autorskiego nadzoru, co zapewnia ich poprawność oraz zgodność ze
+standardami akademickimi.

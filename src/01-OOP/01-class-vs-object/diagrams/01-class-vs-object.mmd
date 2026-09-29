@@ -1,0 +1,29 @@
+%% Diagram: klasa a obiekt (instancja) - temat 01
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+classDiagram
+    class Hero {
+        +species : str
+        +Hero(name, hp)
+        +take_damage(amount) : int
+        +__repr__() : str
+        +__eq__(other) : bool
+    }
+
+    class aragorn {
+        +name : str
+        +hp : int
+    }
+
+    class legolas {
+        +name : str
+        +hp : int
+    }
+
+    Hero --> aragorn : tworzy instancje
+    Hero --> legolas : tworzy instancje
+    aragorn ..> Hero : species szukane w klasie
+    legolas ..> Hero : species szukane w klasie
+    note for Hero "species jest atrybutem klasowym - wspoldzielonym"
+    note for aragorn "name='Aragorn', hp=100"
+    note for legolas "name='Legolas', hp=80"
+    note for Hero "Jak szuka atrybutu: instancja, potem klasa, potem klasy bazowe - MRO"

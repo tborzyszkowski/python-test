@@ -1,0 +1,26 @@
+%% Diagram: anatomia testu jednostkowego - temat 06
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+flowchart TB
+    U["JEDNOSTKA<br/>jedna metoda / funkcja / klasa"] --> P["JEDNA WLASNOSC<br/>jedno zachowanie, jedna przyczyna porazki"]
+    P --> N["NAZWA = SPECYFIKACJA<br/>test_drive_beyond_range_raises_and_keeps_fuel"]
+    P --> Z["ZAKRES<br/>Act = jedno wywolanie testowanej metody"]
+    P --> A["ASERCJA<br/>konkretna wartosc, nie `is not None`<br/>approx dla float, raises(match=...) dla bledow"]
+
+    U --> I["IZOLACJA"]
+    I --> I1["swiezy obiekt w kazdym tescie<br/>brak stanu wspoldzielonego"]
+    I --> I2["stan klasowy -> fixture autouse"]
+    I --> I3["env -> monkeypatch.setenv"]
+    I --> I4["pliki -> tmp_path"]
+    I --> I5["losowosc i czas -> monkeypatch / seed"]
+
+    I1 --> D["DETERMINIZM<br/>ten sam wynik zawsze i wszedzie"]
+    I2 --> D
+    I3 --> D
+    I4 --> D
+    I5 --> D
+    D --> F["FIRST<br/>Fast, Isolated, Repeatable,<br/>Self-validating, Timely"]
+
+    classDef core fill:#e3f2fd,stroke:#1565c0
+    classDef iso fill:#e8f5e9,stroke:#2e7d32
+    class U,P,N,Z,A core
+    class I1,I2,I3,I4,I5,D,F iso

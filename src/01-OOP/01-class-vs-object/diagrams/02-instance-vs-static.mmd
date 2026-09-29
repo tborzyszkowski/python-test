@@ -1,0 +1,18 @@
+%% Diagram: wybor rodzaju skladowej klasy - temat 01
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+flowchart TD
+    S{"Co jest potrzebne<br/>do wykonania operacji?"} -->|"stan konkretnego<br/>obiektu (self)"| I["Metoda instancyjna<br/>def f(self, ...)"]
+    S -->|"klasa / podklasy,<br/>alternatywny konstruktor"| C["@classmethod<br/>def f(cls, ...)"]
+    S -->|"nic - czysta logika,<br/>reguła biznesowa"| M["@staticmethod<br/>def f(...)"]
+    S -->|"jedna wartość wspólna<br/>dla wszystkich"| A["Atrybut klasowy<br/>POLE = wartość"]
+
+    I --> IT["Test: utwórz obiekt,<br/>zmień stan, sprawdź stan"]
+    C --> CT["Test: sprawdź wynik klasy<br/>i działanie dla podklasy"]
+    M --> MT["Test: czysta funkcja -<br/>parametrize, bez setup"]
+    A --> AT["Test: wymaga jawnego<br/>resetu stanu klasy!"]
+
+    classDef easy fill:#e8f5e9,stroke:#2e7d32
+    classDef hard fill:#fff3e0,stroke:#ef6c00
+    class MT,CT easy
+    class IT easy
+    class AT hard

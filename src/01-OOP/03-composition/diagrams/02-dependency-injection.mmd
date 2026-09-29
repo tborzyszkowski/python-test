@@ -1,0 +1,27 @@
+%% Diagram: wstrzykiwanie zaleznosci (DI) i podmiana na atrape - temat 03
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+flowchart TD
+    subgraph PROD["Kod produkcyjny"]
+        OS1["OrderService(gateway=...)"]
+        SG["StripeGateway<br/>prawdziwe API platnosci"]
+        OS1 -->|"wola charge()"| SG
+    end
+
+    subgraph TEST["Test jednostkowy"]
+        OS2["OrderService(gateway=...)"]
+        FG["FakeGateway<br/>zapisuje wywolania, zwraca fake-0001"]
+        OS2 -->|"wola charge()"| FG
+        AS["Assert:<br/>transaction_id == 'fake-0001'<br/>fake.calls == [(999, 'order')]<br/>service.lines == []"]
+        OS2 -.-> AS
+    end
+
+    IFACE{{"Kontrakt (Protocol PaymentGateway):<br/>charge(amount_cents, description) -> str"}}
+    SG -.->|"spelnia"| IFACE
+    FG -.->|"spelnia"| IFACE
+    OS1 -.->|"zna tylko kontrakt"| IFACE
+    OS2 -.->|"zna tylko kontrakt"| IFACE
+
+    classDef prod fill:#e3f2fd,stroke:#1565c0
+    classDef test fill:#e8f5e9,stroke:#2e7d32
+    class OS1,SG prod
+    class OS2,FG,AS test

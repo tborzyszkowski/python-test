@@ -1,0 +1,56 @@
+%% Diagram: hierarchia narzedzi (dziedziczenie + abstrakcja) - temat 04
+%% Podglad: VS Code + "Markdown Preview Mermaid Support" lub generate_diagrams.py
+classDiagram
+    class Tool {
+        <<abstract>>
+        +wear_per_use : int = 1
+        +name : str
+        +durability : int
+        +uses : int
+        +is_broken : bool
+        +use(target) str
+        +effect_on(target) str
+        +repair(amount) int
+    }
+
+    class Broom {
+        +wear_per_use = 1
+        +effect_on(target) str
+    }
+
+    class Driller {
+        +wear_per_use = 5
+        +bit_mm : float
+        +effect_on(target) str
+        +drill_many(target, count) list
+    }
+
+    class Knife {
+        +wear_per_use = 2
+        +blade_cm : float
+        +effect_on(target) str
+        +is_sharp() bool
+    }
+
+    class KitchenKnife {
+        +effect_on(target) str
+    }
+
+    class ToolKit {
+        -_tools : list
+        +add(tool) None
+        +use_all(target) dict
+        +total_durability : int
+        +broken_tools : list
+        +most_durable() Tool
+    }
+
+    Tool <|-- Broom
+    Tool <|-- Driller
+    Tool <|-- Knife
+    Knife <|-- KitchenKnife
+    ToolKit o-- "0..*" Tool : agreguje
+
+    note for Tool "use() to metoda szablonowa: sprawdz, zuzyj, wykonaj effect_on()"
+    note for Tool "effect_on() jest abstrakcyjna - kazde narzedzie robi cos innego"
+    note for ToolKit "ToolKit nie zna typow - dziala na kazdym Tool"
