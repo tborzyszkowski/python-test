@@ -12,6 +12,8 @@ dependencies = [
     "behave>=1.2.6",
     "selenium>=4.20",
     "pytest-html>=4.1",
+    "pytest-archon>=0.0.7",
+    "import-linter>=2.15",
 ]
 
 [tool.pytest.ini_options]

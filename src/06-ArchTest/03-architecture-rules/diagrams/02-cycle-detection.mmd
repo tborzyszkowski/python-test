@@ -1,0 +1,5 @@
+flowchart LR
+    A["module A"] --> B["module B"] --> C["module C"] --> A
+    C -. "cycle" .-> E["architecture test fails"]
+    classDef bad fill:#ffebee,stroke:#c62828
+    class A,B,C,E bad

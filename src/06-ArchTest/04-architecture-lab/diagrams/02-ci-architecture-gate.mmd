@@ -1,0 +1,7 @@
+flowchart LR
+    P["Pull request"] --> U["pytest arch rules"]
+    P --> L["lint-imports"]
+    U --> G{"green?"}
+    L --> G
+    G -->|yes| M["merge"]
+    G -->|no| F["fix architecture"]

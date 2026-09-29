@@ -1,0 +1,6 @@
+flowchart TB
+    WEB["web"] --> SERVICES["services"] --> DOMAIN["domain"]
+    INFRA["infrastructure"] --> SERVICES
+    INFRA --> DOMAIN
+    DOMAIN -. "forbidden" .-> WEB
+    DOMAIN -. "forbidden" .-> INFRA

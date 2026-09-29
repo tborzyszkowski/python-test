@@ -1,0 +1,17 @@
+[importlinter]
+root_package = arch_sample
+
+[importlinter:contract:domain-isolation]
+name = Domain must not import outer layers
+type = forbidden
+source_modules = arch_sample.domain
+forbidden_modules = arch_sample.infrastructure, arch_sample.web
+
+[importlinter:contract:layers]
+name = Web and infrastructure depend inward
+type = layers
+layers =
+    arch_sample.web
+    arch_sample.infrastructure
+    arch_sample.services
+    arch_sample.domain

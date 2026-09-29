@@ -57,6 +57,10 @@
     ,"src/04-BDD/03-behave-structure/exercises"
     ,"src/04-BDD/04-passenger-flights/src"
     ,"src/04-BDD/04-passenger-flights/exercises"
+    ,"src/06-ArchTest"
+    ,"src/06-ArchTest/03-architecture-rules/src"
+    ,"src/06-ArchTest/03-architecture-rules/examples"
+    ,"src/06-ArchTest/03-architecture-rules/exercises"
   ],
   "files.encoding": "utf8",
   "files.eol": "\n",

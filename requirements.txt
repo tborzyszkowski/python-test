@@ -5,3 +5,5 @@ ruff>=0.8
 behave>=1.2.6
 selenium>=4.20
 pytest-html>=4.1
+pytest-archon>=0.0.7
+import-linter>=2.15

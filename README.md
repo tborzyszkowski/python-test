@@ -68,6 +68,7 @@ python -m venv .venv
 .venv\Scripts\python.exe -m pytest src\02-TDD -c src\02-TDD\pytest.ini -v
 .venv\Scripts\python.exe -m pytest src\03-test_double -c src\03-test_double\pytest.ini -v
 .venv\Scripts\python.exe -m behave src\04-BDD\04-passenger-flights\features
+.venv\Scripts\python.exe -m pytest src\06-ArchTest -c src\06-ArchTest\pytest.ini -v
 
 # Z pokryciem kodu (coverage):
 .venv\Scripts\python.exe -m pytest src\01-OOP -c src\01-OOP\pytest.ini --cov=src --cov-report=term-missing
@@ -131,6 +132,8 @@ folderu wystarczy:
   `unittest.mock`, `monkeypatch` oraz izolowanie I/O i SSO.
 - [`src/04-BDD/README.md`](src/04-BDD/README.md) - BDD, Outside-In, Gherkin,
   Behave oraz domena lotów ekonomicznych i premium.
+- [`src/06-ArchTest/README.md`](src/06-ArchTest/README.md) - testowanie granic
+  architektury przez `pytest-archon` i `import-linter`.
 
 ## Jak wybrać temat na start?
 
@@ -151,6 +154,7 @@ Dla studentów, którzy znają już podstawy Pythona, polecana kolejność pracy
 13. **`03-test_double/03-racing-car-and-html`** - Stub czujnika i Fake `StringIO`.
 14. **`03-test_double/04-sso-registry`** - Spy i Mock w interakcji z rejestrem.
 15. **`04-BDD/04-passenger-flights`** - scenariusze Gherkin i Behave dla lotów.
+16. **`06-ArchTest/03-architecture-rules`** - izolacja domeny, warstwy, cykle i konwencje.
 
 Sugerowany rytm nauki:
 
@@ -222,6 +226,15 @@ python-test/
         ├── 02-gherkin-language/
         ├── 03-behave-structure/
         └── 04-passenger-flights/
+      └── 06-ArchTest/
+        ├── README.md
+        ├── pytest.ini
+        ├── conftest.py
+        ├── generate_diagrams.py
+        ├── 01-why-architecture-tests/
+        ├── 02-tools-and-contracts/
+        ├── 03-architecture-rules/
+        └── 04-architecture-lab/
 ```
 
 Każdy katalog tematyczny zawiera:
@@ -248,6 +261,8 @@ Każdy katalog tematyczny zawiera:
 | pytest-cov  | ≥ 4.1   | pokrycie kodu testami (`coverage`)       |
 | ruff        | ≥ 0.8   | lintowanie i kontrola stylu              |
 | behave      | ≥ 1.2.6 | automatyzacja scenariuszy Gherkin        |
+| pytest-archon | ≥ 0.0.7 | reguły architektury jako testy pytest     |
+| import-linter | ≥ 2.15  | kontrakty importów i warstw               |
 
 ## Konwencje w repozytorium
 

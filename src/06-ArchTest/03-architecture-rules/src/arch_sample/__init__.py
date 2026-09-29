@@ -1,0 +1,1 @@
+"""Przykladowy pakiet architektury."""
