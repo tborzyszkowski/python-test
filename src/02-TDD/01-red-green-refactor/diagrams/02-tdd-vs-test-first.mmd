@@ -1,0 +1,8 @@
+flowchart TB
+    TDD["TDD"] --> A["jeden test"] --> B["minimalna implementacja"] --> C["refaktoryzacja"] --> A
+    TF["Test-First"] --> D["wiele testow z gory"] --> E["duzy koszt zalozen"] --> F["pozna informacja zwrotna"]
+    TDD -. "iteracyjne uczenie sie domeny" .-> TF
+    classDef good fill:#e8f5e9,stroke:#2e7d32
+    classDef risk fill:#ffebee,stroke:#c62828
+    class TDD,A,B,C good
+    class TF,D,E,F risk

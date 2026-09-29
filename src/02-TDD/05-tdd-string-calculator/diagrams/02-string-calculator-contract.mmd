@@ -1,0 +1,9 @@
+sequenceDiagram
+    participant C as Client
+    participant A as add(numbers)
+    participant E as NegativeNumberError
+    C->>A: "1,2\\n3"
+    A-->>C: 6
+    C->>A: "1,-2,-3"
+    A->>E: numbers=[-2,-3]
+    E-->>C: ValueError with numbers

@@ -1,0 +1,6 @@
+flowchart LR
+    R1["Red: saldo 0"] --> G1["Green: konto"]
+    G1 --> R2["Red: deposit"] --> G2["Green: saldo +"]
+    G2 --> R3["Red: withdraw"] --> G3["Green: saldo -"]
+    G3 --> R4["Red: insufficient funds"] --> G4["Green: domenowy wyjatek"]
+    G4 --> R5["Red: fee and history"] --> G5["Green: atomowa operacja"]

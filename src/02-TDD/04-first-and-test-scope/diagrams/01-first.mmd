@@ -1,0 +1,15 @@
+flowchart TB
+    T["Test"] --> F["Fast"]
+    T --> I["Independent"]
+    T --> R["Repeatable"]
+    T --> S["Self-Validating"]
+    T --> Ti["Timely"]
+    F --> Q["Szybka i wiarygodna informacja zwrotna"]
+    I --> Q
+    R --> Q
+    S --> Q
+    Ti --> Q
+    classDef rule fill:#e8f5e9,stroke:#2e7d32
+    classDef result fill:#e3f2fd,stroke:#1565c0
+    class F,I,R,S,Ti rule
+    class T,Q result

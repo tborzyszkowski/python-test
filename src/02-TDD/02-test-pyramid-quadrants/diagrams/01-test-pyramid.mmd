@@ -1,0 +1,9 @@
+flowchart TB
+    M["Manualne eksploracyjne"] --> A["Akceptacyjne / E2E"] --> I["Integracyjne"] --> U["Jednostkowe"]
+    U:::cheap
+    I:::medium
+    A:::expensive
+    M:::expensive
+    classDef cheap fill:#e8f5e9,stroke:#2e7d32
+    classDef medium fill:#fff3e0,stroke:#ef6c00
+    classDef expensive fill:#ffebee,stroke:#c62828

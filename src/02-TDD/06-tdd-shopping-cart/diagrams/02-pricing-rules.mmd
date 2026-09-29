@@ -1,0 +1,8 @@
+flowchart TD
+    S["subtotal"] --> P["promotion discount"]
+    P --> B["base after promotion"]
+    B --> T{"threshold reached?"}
+    T -->|yes| D["percent discount"]
+    T -->|no| Z["zero threshold discount"]
+    D --> F["total = base - discount"]
+    Z --> F

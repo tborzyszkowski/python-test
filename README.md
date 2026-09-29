@@ -65,14 +65,17 @@ python -m venv .venv
 ```powershell
 # Z katalogu głównego projektu (Windows):
 .venv\Scripts\python.exe -m pytest src\01-OOP -c src\01-OOP\pytest.ini -v
+.venv\Scripts\python.exe -m pytest src\02-TDD -c src\02-TDD\pytest.ini -v
 
 # Z pokryciem kodu (coverage):
 .venv\Scripts\python.exe -m pytest src\01-OOP -c src\01-OOP\pytest.ini --cov=src --cov-report=term-missing
+.venv\Scripts\python.exe -m pytest src\02-TDD -c src\02-TDD\pytest.ini --cov=src --cov-report=term-missing
 ```
 
 ```bash
 # Po aktywacji venv (każdy system):
 python -m pytest src/01-OOP -c src/01-OOP/pytest.ini -v
+python -m pytest src/02-TDD -c src/02-TDD/pytest.ini -v
 ```
 
 ### 4. Wygeneruj diagramy PNG z plików Mermaid
@@ -84,6 +87,7 @@ w katalogach `diagrams/` każdego tematu. Renderowanie do PNG:
 # Użyje lokalnego mmdc (jeśli jest zainstalowany), a w przeciwnym razie
 # usługi online (kroki.io, potem mermaid.ink) - wymaga połączenia z Internetem
 .venv\Scripts\python.exe src\01-OOP\generate_diagrams.py
+.venv\Scripts\python.exe src\02-TDD\generate_diagrams.py
 
 # Tylko wybrane tematy / nadpisanie istniejących plików PNG:
 .venv\Scripts\python.exe src\01-OOP\generate_diagrams.py --only 05-aaa-pattern --force
@@ -100,7 +104,7 @@ folderu wystarczy:
 
 1. Wskazać interpreter z `.venv` (`Ctrl+Shift+P` → *Python: Select Interpreter*).
 2. Otworzyć panel **Testing** (ikona kolby) — pytest wykryje wszystkie testy
-   (ponad 330 przypadków) i pozwoli uruchamiać oraz debugować pojedyncze
+  (ponad 390 przypadków) i pozwoli uruchamiać oraz debugować pojedyncze
    pozycje bez wpisywania komend.
 3. Nacisnąć `F5`, aby uruchomić jedną z gotowych konfiguracji:
    `Python: bieżący plik`, `Python: pytest (moduł 01-OOP)`,
@@ -115,6 +119,9 @@ folderu wystarczy:
 - [`src/01-OOP/README.md`](src/01-OOP/README.md) - programowanie obiektowe w kontekście testowalności
   (klasa vs obiekt, hermetyzacja i `@property`, kompozycja, dziedziczenie i polimorfizm)
   oraz wprowadzenie do testów jednostkowych (AAA, `unittest`, `pytest`)
+- [`src/02-TDD/README.md`](src/02-TDD/README.md) - teoria i praktyka TDD:
+  Red-Green-Refactor, piramida i kwadranty testów, dług technologiczny,
+  F.I.R.S.T. oraz trzy projekty rozwijane iteracyjnie.
 
 ## Jak wybrać temat na start?
 
@@ -127,6 +134,10 @@ Dla studentów, którzy znają już podstawy Pythona, polecana kolejność pracy
 5. **`01-OOP/05-aaa-pattern`** - struktura Arrange - Act - Assert.
 6. **`01-OOP/06-unit-test-anatomy`** - jak sformułować test jednostkowy jednej własności.
 7. **`01-OOP/07-testing-frameworks`** - porównanie `unittest` i `pytest` na tym samym kodzie.
+8. **`02-TDD/01-red-green-refactor`** - cykl TDD i różnica względem Test-First.
+9. **`02-TDD/05-tdd-string-calculator`** - pierwszy pełny projekt TDD.
+10. **`02-TDD/06-tdd-shopping-cart`** - stan i reguły rabatowe.
+11. **`02-TDD/07-tdd-bank-account`** - wyjątki, historia i opłaty.
 
 Sugerowany rytm nauki:
 
@@ -151,7 +162,7 @@ python-test/
 │   ├── setup_venv.ps1            # skrypt konfiguracyjny (Windows PowerShell)
 │   └── setup_venv.sh             # skrypt konfiguracyjny (Linux/macOS)
 └── src/
-    └── 01-OOP/
+  ├── 01-OOP/
         ├── README.md             # przegląd modułu i scenariusz wykładu
         ├── pytest.ini            # konfiguracja pytest dla modułu
         ├── conftest.py           # wspólne fixture'y i ścieżki importów
@@ -167,6 +178,19 @@ python-test/
         ├── 05-aaa-pattern/
         ├── 06-unit-test-anatomy/
         └── 07-testing-frameworks/
+      └── 02-TDD/
+        ├── README.md             # teoria TDD i scenariusz wykładu
+        ├── pytest.ini            # konfiguracja pytest dla modułu
+        ├── conftest.py           # wspólne ścieżki importów
+        ├── generate_diagrams.py  # generator PNG z plików .mmd
+        ├── 01-red-green-refactor/
+        ├── 02-test-pyramid-quadrants/
+        ├── 03-technical-debt/
+        ├── 04-first-and-test-scope/
+        ├── 05-tdd-string-calculator/
+        ├── 06-tdd-shopping-cart/
+        ├── 07-tdd-bank-account/
+        └── 08-tdd-review-and-practice/
 ```
 
 Każdy katalog tematyczny zawiera:
@@ -181,6 +205,10 @@ Każdy katalog tematyczny zawiera:
 > rozwiązaniem jest tam plik `exercises/test_solutions_XX.py`, a kod produkcyjny
 > dostarczany jest w gotowej postaci (`shopping_cart.py`, `string_utils.py`).
 
+> W module `02-TDD` projekty 05-07 pokazują pełny cykl TDD; pliki
+> `test_*.py` są punktami obserwacji kolejnych iteracji, a `tdd_solutions_XX.py`
+> zawierają rozwiązania ćwiczeń bez kolizji nazw z modułem `01-OOP`.
+
 ## Zależności
 
 | Pakiet      | Wersja  | Opis                                     |
@@ -194,8 +222,8 @@ Każdy katalog tematyczny zawiera:
 - Każdy temat w osobnym katalogu o nazwie `NN-nazwa-tematu`.
 - Skrypty demonstracyjne uruchamia się przez `python examples/nazwa.py`,
   a pliki `test_*.py` przez `pytest examples/test_*.py -v`.
-- Wszystkie testy to pliki `test_*.py` z unikalnymi nazwami (moduły `examples/`
-  i `exercises/` trafiają na `sys.path` przez `src/01-OOP/conftest.py`).
+- Wszystkie testy to pliki `test_*.py` z unikalnymi nazwami; moduły mają własne
+  `conftest.py`, które dodają katalogi przykładów i ćwiczeń do `sys.path`.
 - Diagramy trzymamy w Mermaid (`.mmd`), bo są czytelne w diffach Git.
 
 ## Licencja

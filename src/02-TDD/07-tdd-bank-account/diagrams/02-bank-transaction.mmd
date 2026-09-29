@@ -1,0 +1,8 @@
+stateDiagram-v2
+    [*] --> Empty
+    Empty --> PositiveBalance: deposit(amount)
+    PositiveBalance --> PositiveBalance: deposit(amount)
+    PositiveBalance --> PositiveBalance: withdraw(valid)
+    PositiveBalance --> PositiveBalance: transfer(valid + fee)
+    PositiveBalance --> PositiveBalance: invalid operation / no state change
+    PositiveBalance --> [*]: close account

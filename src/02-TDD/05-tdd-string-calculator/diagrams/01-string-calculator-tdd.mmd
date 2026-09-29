@@ -1,0 +1,6 @@
+flowchart LR
+    R1["Red: empty"] --> G1["Green: 0"] --> R2["Red: one"] --> G2["Green: int"]
+    G2 --> R3["Red: comma"] --> G3["Green: split"]
+    G3 --> R4["Red: newline"] --> G4["Green: regex"]
+    G4 --> R5["Red: negative"] --> G5["Green: domain error"]
+    G5 --> F["Refactor: helpers"]

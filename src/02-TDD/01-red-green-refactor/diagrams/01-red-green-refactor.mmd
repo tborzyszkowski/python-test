@@ -1,0 +1,7 @@
+flowchart LR
+    R["RED<br/>jeden test nie przechodzi"] --> G["GREEN<br/>najprostszy kod"]
+    G --> F["REFACTOR<br/>lepsza struktura"]
+    F --> R
+    R -. "test opisuje zachowanie" .-> C1["kontrakt"]
+    G -. "bez przedwczesnej generalizacji" .-> C2["minimalny kod"]
+    F -. "bez zmiany zachowania" .-> C3["czytelnosc"]

@@ -1,0 +1,11 @@
+flowchart LR
+    A["Skrot na szybko"] --> B["Szybszy deploy"] --> C["Odsetki"]
+    C --> C1["wolniejsze zmiany"]
+    C --> C2["reczne testy"]
+    C --> C3["strach przed refaktorem"]
+    T["testy regresji"] -. "zmniejszaja odsetki" .-> C
+    R["refaktoryzacja"] -. "splata" .-> C
+    classDef risk fill:#ffebee,stroke:#c62828
+    classDef help fill:#e8f5e9,stroke:#2e7d32
+    class A,B,C,C1,C2,C3 risk
+    class T,R help

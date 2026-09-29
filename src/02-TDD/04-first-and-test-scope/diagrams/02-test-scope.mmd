@@ -1,0 +1,7 @@
+flowchart TD
+    B{"Regula biznesowa?"} -->|tak| U["Testuj publiczne zachowanie"]
+    B -->|nie| E{"Integracja z zewnętrznym systemem?"}
+    E -->|tak| A["Testuj kontrakt adaptera"]
+    E -->|nie| N["Nie testuj tylko dla pokrycia"]
+    U --> R["Dodaj przypadki brzegowe i regresje"]
+    A --> R

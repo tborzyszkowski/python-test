@@ -1,0 +1,6 @@
+flowchart LR
+    R1["Red: pusty cart"] --> G1["Green: total 0"]
+    G1 --> R2["Red: add"] --> G2["Green: subtotal"]
+    G2 --> R3["Red: threshold"] --> G3["Green: discount"]
+    G3 --> R4["Red: 3 for 2"] --> G4["Green: promotion"]
+    G4 --> F["Refactor: osobne reguly cenowe"]
