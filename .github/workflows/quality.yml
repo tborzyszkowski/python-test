@@ -25,7 +25,16 @@ jobs:
         run: python -m pip install -r requirements.txt
 
       - name: Run tests
-        run: python -m pytest src/01-OOP -c src/01-OOP/pytest.ini -q
+        run: python -m pytest src -q
+
+      - name: Run BDD scenarios
+        run: python -m behave src/04-BDD/04-passenger-flights/features -f progress
+
+      - name: Run architecture contracts
+        working-directory: src/06-ArchTest/03-architecture-rules
+        env:
+          PYTHONPATH: ${{ github.workspace }}/src/06-ArchTest/03-architecture-rules/src
+        run: lint-imports --config .importlinter
 
       - name: Run Ruff
-        run: python -m ruff check src/01-OOP
+        run: python -m ruff check src

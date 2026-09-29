@@ -61,6 +61,15 @@
     ,"src/06-ArchTest/03-architecture-rules/src"
     ,"src/06-ArchTest/03-architecture-rules/examples"
     ,"src/06-ArchTest/03-architecture-rules/exercises"
+    ,"src/05-Selenium"
+    ,"src/05-Selenium/01-webdriver-and-locators/examples"
+    ,"src/05-Selenium/01-webdriver-and-locators/exercises"
+    ,"src/05-Selenium/02-waits-and-flaky-tests/examples"
+    ,"src/05-Selenium/02-waits-and-flaky-tests/exercises"
+    ,"src/05-Selenium/03-page-object-model/examples"
+    ,"src/05-Selenium/03-page-object-model/exercises"
+    ,"src/05-Selenium/04-pytest-integration/examples"
+    ,"src/05-Selenium/04-pytest-integration/exercises"
   ],
   "files.encoding": "utf8",
   "files.eol": "\n",

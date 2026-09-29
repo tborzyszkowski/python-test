@@ -69,6 +69,7 @@ python -m venv .venv
 .venv\Scripts\python.exe -m pytest src\03-test_double -c src\03-test_double\pytest.ini -v
 .venv\Scripts\python.exe -m behave src\04-BDD\04-passenger-flights\features
 .venv\Scripts\python.exe -m pytest src\06-ArchTest -c src\06-ArchTest\pytest.ini -v
+.venv\Scripts\python.exe -m pytest src\05-Selenium -c src\05-Selenium\pytest.ini -v
 
 # Z pokryciem kodu (coverage):
 .venv\Scripts\python.exe -m pytest src\01-OOP -c src\01-OOP\pytest.ini --cov=src --cov-report=term-missing
@@ -109,7 +110,7 @@ folderu wystarczy:
 
 1. Wskazać interpreter z `.venv` (`Ctrl+Shift+P` → *Python: Select Interpreter*).
 2. Otworzyć panel **Testing** (ikona kolby) — pytest wykryje wszystkie testy
-  (ponad 390 przypadków) i pozwoli uruchamiać oraz debugować pojedyncze
+  (ponad 440 przypadków) i pozwoli uruchamiać oraz debugować pojedyncze
    pozycje bez wpisywania komend.
 3. Nacisnąć `F5`, aby uruchomić jedną z gotowych konfiguracji:
    `Python: bieżący plik`, `Python: pytest (moduł 01-OOP)`,
@@ -134,6 +135,8 @@ folderu wystarczy:
   Behave oraz domena lotów ekonomicznych i premium.
 - [`src/06-ArchTest/README.md`](src/06-ArchTest/README.md) - testowanie granic
   architektury przez `pytest-archon` i `import-linter`.
+- [`src/05-Selenium/README.md`](src/05-Selenium/README.md) - Selenium WebDriver,
+  lokalizatory, waits, Page Object Model i pytest-html.
 
 ## Jak wybrać temat na start?
 
@@ -155,6 +158,7 @@ Dla studentów, którzy znają już podstawy Pythona, polecana kolejność pracy
 14. **`03-test_double/04-sso-registry`** - Spy i Mock w interakcji z rejestrem.
 15. **`04-BDD/04-passenger-flights`** - scenariusze Gherkin i Behave dla lotów.
 16. **`06-ArchTest/03-architecture-rules`** - izolacja domeny, warstwy, cykle i konwencje.
+17. **`05-Selenium/03-page-object-model`** - POM i testy browserowe E2E.
 
 Sugerowany rytm nauki:
 
@@ -235,6 +239,16 @@ python-test/
         ├── 02-tools-and-contracts/
         ├── 03-architecture-rules/
         └── 04-architecture-lab/
+      └── 05-Selenium/
+        ├── README.md
+        ├── pytest.ini
+        ├── conftest.py
+        ├── generate_diagrams.py
+        ├── web/
+        ├── 01-webdriver-and-locators/
+        ├── 02-waits-and-flaky-tests/
+        ├── 03-page-object-model/
+        └── 04-pytest-integration/
 ```
 
 Każdy katalog tematyczny zawiera:
