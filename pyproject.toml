@@ -10,6 +10,8 @@ dependencies = [
     "pytest-cov>=4.1",
     "ruff>=0.8",
     "behave>=1.2.6",
+    "selenium>=4.20",
+    "pytest-html>=4.1",
 ]
 
 [tool.pytest.ini_options]
@@ -20,6 +22,7 @@ python_functions = ["test_*"]
 addopts = "-ra --strict-markers"
 markers = [
     "slow: testy wolniejsze (mozna pominac przez -m 'not slow')",
+    "selenium: testy wymagajace uruchomienia przegladarki",
 ]
 
 [tool.coverage.run]

@@ -1,0 +1,5 @@
+flowchart TD
+    A["fixture setup"] --> B["driver"] --> C["test"]
+    C --> D{"failure?"}
+    D -->|yes| E["screenshot"] --> F["quit"]
+    D -->|no| F

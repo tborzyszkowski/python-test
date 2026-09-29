@@ -1,0 +1,12 @@
+classDiagram
+    class LoginPage {
+        +open()
+        +login(username, password)
+        +message() str
+    }
+    class Test {
+        +test_login()
+    }
+    class WebDriver
+    Test --> LoginPage
+    LoginPage --> WebDriver

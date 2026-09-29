@@ -1,0 +1,10 @@
+sequenceDiagram
+    participant T as Test
+    participant W as WebDriverWait
+    participant B as Browser
+    T->>W: until(condition)
+    loop polling
+        W->>B: inspect DOM
+        B-->>W: not ready / ready
+    end
+    W-->>T: WebElement or TimeoutException

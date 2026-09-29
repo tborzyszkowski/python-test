@@ -1,0 +1,6 @@
+flowchart TD
+    E["Element"] --> I{"stabilne id?"}
+    I -->|tak| ID["By.ID"]
+    I -->|nie| N{"name / data-testid?"}
+    N -->|tak| CSS["By.NAME / CSS"]
+    N -->|nie| X["XPath lub stabilny CSS"]

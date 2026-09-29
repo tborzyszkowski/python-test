@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Demo Login</title></head>
+<body>
+  <main id="login-page">
+    <h1>Demo Login</h1>
+    <form id="login-form">
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password">
+      <button id="login-button" type="submit">Login</button>
+    </form>
+    <p id="message" role="status"></p>
+  </main>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const user = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      document.getElementById('message').textContent = user && password ? 'Logged in' : 'Missing credentials';
+    });
+  </script>
+</body>
+</html>

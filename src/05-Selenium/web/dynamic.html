@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Dynamic Demo</title></head>
+<body>
+  <h1 id="title">Dynamic page</h1>
+  <button id="load-button" type="button">Load result</button>
+  <p id="result" aria-live="polite"></p>
+  <script>
+    document.getElementById('load-button').addEventListener('click', function() {
+      setTimeout(function() { document.getElementById('result').textContent = 'Loaded'; }, 250);
+    });
+  </script>
+</body>
+</html>
