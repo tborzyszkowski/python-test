@@ -1,0 +1,7 @@
+flowchart TB
+    M["unittest.mock.Mock"] --> RV["return_value"]
+    M --> SE["side_effect"]
+    M --> AC["assert_called_once_with"]
+    P["patch"] --> X["czasowa podmiana symbolu"]
+    MP["pytest monkeypatch"] --> ENV["env / atrybut / katalog"]
+    MP --> REST["automatyczne przywracanie"]

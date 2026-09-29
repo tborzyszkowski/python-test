@@ -39,6 +39,15 @@
     "src/02-TDD/07-tdd-bank-account/examples",
     "src/02-TDD/07-tdd-bank-account/exercises",
     "src/02-TDD/08-tdd-review-and-practice/exercises"
+    ,"src/03-test_double"
+    ,"src/03-test_double/01-test-double-taxonomy/examples"
+    ,"src/03-test_double/01-test-double-taxonomy/exercises"
+    ,"src/03-test_double/02-verification-and-tools/examples"
+    ,"src/03-test_double/02-verification-and-tools/exercises"
+    ,"src/03-test_double/03-racing-car-and-html/examples"
+    ,"src/03-test_double/03-racing-car-and-html/exercises"
+    ,"src/03-test_double/04-sso-registry/examples"
+    ,"src/03-test_double/04-sso-registry/exercises"
   ],
   "files.encoding": "utf8",
   "files.eol": "\n",

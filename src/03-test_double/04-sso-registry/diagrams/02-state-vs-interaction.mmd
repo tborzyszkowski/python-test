@@ -1,0 +1,7 @@
+flowchart LR
+    A["logout(token)"] --> R["Return value: True"]
+    A --> S["State: Spy.calls"]
+    A --> I["Interaction: Mock assertion"]
+    R --> Q["czy akcja sie powiodla?"]
+    S --> Q2["co zapisano?"]
+    I --> Q3["czy zaleznosc dostala kontraktowe wywolanie?"]

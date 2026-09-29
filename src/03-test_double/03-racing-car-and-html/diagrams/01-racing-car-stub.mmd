@@ -1,0 +1,8 @@
+sequenceDiagram
+    participant T as Test
+    participant C as RacingCar
+    participant S as StubPressureSensor
+    T->>C: check_tires()
+    C->>S: read_pressure() x4
+    S-->>C: prepared readings
+    C-->>T: True / False

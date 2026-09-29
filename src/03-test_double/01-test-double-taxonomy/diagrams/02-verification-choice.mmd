@@ -1,0 +1,5 @@
+flowchart TD
+    Q{"Co sprawdzasz?"} -->|"wynik lub wyjatek"| ST["Stub / Fake"]
+    Q -->|"stan obiektu"| FA["Fake / prawdziwy obiekt"]
+    Q -->|"czy zaleznosc zostala wywolana"| SP["Spy / Mock"]
+    Q -->|"parametr tylko wypelnia API"| DU["Dummy"]

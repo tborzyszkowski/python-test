@@ -1,0 +1,8 @@
+flowchart LR
+    Q{"Pytanie testu"} --> R["Return / Exception"]
+    Q --> S["State change"]
+    Q --> I["Interaction"]
+    R --> ST["Stub"]
+    S --> FA["Fake"]
+    I --> SP["Spy"]
+    I --> MO["Mock"]

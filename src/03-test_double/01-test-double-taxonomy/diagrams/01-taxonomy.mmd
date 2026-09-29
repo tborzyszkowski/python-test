@@ -1,0 +1,7 @@
+flowchart LR
+    D["Dummy"] --> S["Stub"] --> F["Fake"] --> Y["Spy"] --> M["Mock"]
+    D -. "wypelnia argument" .-> Q["Pytanie testu"]
+    S -. "odpowiedz" .-> Q
+    F -. "stan" .-> Q
+    Y -. "wywolania" .-> Q
+    M -. "oczekiwania" .-> Q

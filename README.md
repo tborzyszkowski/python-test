@@ -66,6 +66,7 @@ python -m venv .venv
 # Z katalogu głównego projektu (Windows):
 .venv\Scripts\python.exe -m pytest src\01-OOP -c src\01-OOP\pytest.ini -v
 .venv\Scripts\python.exe -m pytest src\02-TDD -c src\02-TDD\pytest.ini -v
+.venv\Scripts\python.exe -m pytest src\03-test_double -c src\03-test_double\pytest.ini -v
 
 # Z pokryciem kodu (coverage):
 .venv\Scripts\python.exe -m pytest src\01-OOP -c src\01-OOP\pytest.ini --cov=src --cov-report=term-missing
@@ -76,6 +77,7 @@ python -m venv .venv
 # Po aktywacji venv (każdy system):
 python -m pytest src/01-OOP -c src/01-OOP/pytest.ini -v
 python -m pytest src/02-TDD -c src/02-TDD/pytest.ini -v
+python -m pytest src/03-test_double -c src/03-test_double/pytest.ini -v
 ```
 
 ### 4. Wygeneruj diagramy PNG z plików Mermaid
@@ -122,6 +124,9 @@ folderu wystarczy:
 - [`src/02-TDD/README.md`](src/02-TDD/README.md) - teoria i praktyka TDD:
   Red-Green-Refactor, piramida i kwadranty testów, dług technologiczny,
   F.I.R.S.T. oraz trzy projekty rozwijane iteracyjnie.
+- [`src/03-test_double/README.md`](src/03-test_double/README.md) - taksonomia
+  Dummy, Stub, Fake, Spy i Mock, asercje wartości/stanu/interakcji,
+  `unittest.mock`, `monkeypatch` oraz izolowanie I/O i SSO.
 
 ## Jak wybrać temat na start?
 
@@ -138,6 +143,9 @@ Dla studentów, którzy znają już podstawy Pythona, polecana kolejność pracy
 9. **`02-TDD/05-tdd-string-calculator`** - pierwszy pełny projekt TDD.
 10. **`02-TDD/06-tdd-shopping-cart`** - stan i reguły rabatowe.
 11. **`02-TDD/07-tdd-bank-account`** - wyjątki, historia i opłaty.
+12. **`03-test_double/01-test-double-taxonomy`** - role atrap testowych.
+13. **`03-test_double/03-racing-car-and-html`** - Stub czujnika i Fake `StringIO`.
+14. **`03-test_double/04-sso-registry`** - Spy i Mock w interakcji z rejestrem.
 
 Sugerowany rytm nauki:
 
@@ -191,6 +199,15 @@ python-test/
         ├── 06-tdd-shopping-cart/
         ├── 07-tdd-bank-account/
         └── 08-tdd-review-and-practice/
+      └── 03-test_double/
+        ├── README.md             # taksonomia i scenariusz wykładu
+        ├── pytest.ini            # konfiguracja pytest dla modułu
+        ├── conftest.py           # wspólne ścieżki importów
+        ├── generate_diagrams.py  # generator PNG z plików .mmd
+        ├── 01-test-double-taxonomy/
+        ├── 02-verification-and-tools/
+        ├── 03-racing-car-and-html/
+        └── 04-sso-registry/
 ```
 
 Każdy katalog tematyczny zawiera:

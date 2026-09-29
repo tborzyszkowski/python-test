@@ -1,0 +1,9 @@
+sequenceDiagram
+    participant T as Test
+    participant S as SessionService
+    participant D as Spy/Mock Registry
+    T->>S: logout(token)
+    S->>D: unregister(token)
+    D-->>S: True
+    S-->>T: True
+    T->>D: sprawdz calls / assert_called_once_with
