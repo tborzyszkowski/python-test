@@ -16,8 +16,11 @@ testowanie, aż do frameworków testów jednostkowych (`unittest`, `pytest`).
 ## Wymagania
 
 - Python **3.11** lub nowszy (zalecany 3.13) — [python.org](https://www.python.org/downloads/)
-- Nie jest wymagana żadna zewnętrzna instalacja poza standardowym Pythonem
-  (do testów wystarczy `pytest` instalowany skryptem `scripts/setup_venv.*`)
+- Wymagany jest Python **3.11+** oraz pakiety z `requirements.txt`; skrypt
+  `scripts/setup_venv.*` instaluje pytest, coverage i Ruff. Typowanie można
+  dodatkowo sprawdzać przez Pylance w Visual Studio Code.
+- Repozytorium jest celowo **Python-only**. Nie zawiera projektu `.NET 9`; zapis
+  o uruchamianiu przez .NET należy traktować jako niepasujący do tego kursu.
 
 ## Szybki start
 
@@ -135,13 +138,15 @@ Sugerowany rytm nauki:
 
 ```
 python-test/
+├── .github/workflows/            # automatyczne testy i lintowanie
+│   └── quality.yml
 ├── .vscode/                      # konfiguracja VS Code (testy, debugowanie, Mermaid)
 │   ├── launch.json               # gotowe konfiguracje F5 (plik, pytest, unittest)
 │   ├── settings.json             # Test Explorer, ścieżki importów, kodowanie UTF-8
 │   └── extensions.json           # zalecane rozszerzenia (Python, Pylance, Mermaid)
 ├── .venv/                        # środowisko wirtualne (ignorowane przez git)
 ├── requirements.txt              # zależności projektu
-├── pyproject.toml                # konfiguracja narzędzi (pytest, coverage, ruff, mypy)
+├── pyproject.toml                # konfiguracja narzędzi (pytest, coverage, ruff)
 ├── scripts/
 │   ├── setup_venv.ps1            # skrypt konfiguracyjny (Windows PowerShell)
 │   └── setup_venv.sh             # skrypt konfiguracyjny (Linux/macOS)
@@ -182,11 +187,13 @@ Każdy katalog tematyczny zawiera:
 |-------------|---------|------------------------------------------|
 | pytest      | ≥ 7.4   | framework do testów jednostkowych        |
 | pytest-cov  | ≥ 4.1   | pokrycie kodu testami (`coverage`)       |
+| ruff        | ≥ 0.8   | lintowanie i kontrola stylu              |
 
 ## Konwencje w repozytorium
 
 - Każdy temat w osobnym katalogu o nazwie `NN-nazwa-tematu`.
-- Każdy przykład da się uruchomić samodzielnie: `python examples/nazwa.py`.
+- Skrypty demonstracyjne uruchamia się przez `python examples/nazwa.py`,
+  a pliki `test_*.py` przez `pytest examples/test_*.py -v`.
 - Wszystkie testy to pliki `test_*.py` z unikalnymi nazwami (moduły `examples/`
   i `exercises/` trafiają na `sys.path` przez `src/01-OOP/conftest.py`).
 - Diagramy trzymamy w Mermaid (`.mmd`), bo są czytelne w diffach Git.

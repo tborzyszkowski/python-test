@@ -72,7 +72,7 @@ class ShoppingCart:
     def subtotal_cents(self) -> int:
         """Suma pozycji po rabacie, przed podatkiem (zaokrąglona w dół)."""
         gross = sum(price * quantity for price, quantity in self._items.values())
-        return gross * int(100 - self._discount_percent) // 100
+        return int(gross * (100 - self._discount_percent) // 100)
 
     @property
     def tax_cents(self) -> int:

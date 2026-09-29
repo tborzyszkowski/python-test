@@ -24,7 +24,6 @@ Zasady, które widać w każdym teście poniżej:
 from __future__ import annotations
 
 import pytest
-
 from shopping_cart import ShoppingCart, parse_price
 
 # --------------------------------------------------------------------------- #
@@ -135,6 +134,18 @@ def test_ten_percent_discount_reduces_subtotal():
 
     # Assert
     assert cart.subtotal_cents == 90_000
+
+
+def test_fractional_discount_is_not_truncated():
+    # Arrange
+    cart = ShoppingCart()
+    cart.add("laptop", 10_000)
+
+    # Act
+    cart.apply_discount(10.5)
+
+    # Assert
+    assert cart.subtotal_cents == 8_950
 
 
 def test_zero_and_full_discount_are_allowed():

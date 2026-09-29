@@ -94,7 +94,7 @@ class Point:
         """Odległość od początku układu współrzędnych (zawsze aktualna)."""
         return math.hypot(self._x, self._y)
 
-    def distance_to(self, other: "Point") -> float:
+    def distance_to(self, other: Point) -> float:
         if not isinstance(other, Point):
             raise TypeError(f"expected Point, got {type(other).__name__}")
         return math.hypot(self._x - other._x, self._y - other._y)

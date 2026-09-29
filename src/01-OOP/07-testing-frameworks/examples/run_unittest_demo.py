@@ -98,8 +98,10 @@ def demo_reverse_direction() -> None:
 
 def print_cheatsheet() -> None:
     header("Ściągawka: jak uruchamiać testy")
-    print("""  # unittest, jeden plik
-  python -m unittest src/01-OOP/07-testing-frameworks/examples/test_unittest_calculator.py -v
+    print("""  # unittest, jeden plik (z katalogu examples)
+    cd src/01-OOP/07-testing-frameworks/examples
+    python -m unittest test_unittest_calculator -v
+    cd ../../../..
 
   # unittest, cały katalog (discover)
   python -m unittest discover -s src/01-OOP/07-testing-frameworks/examples -v

@@ -15,7 +15,6 @@ Testy pokazują dwie ważne techniki, które wrócą w kolejnych tematach:
 from __future__ import annotations
 
 import pytest
-
 from solutions_01 import Ammo, AmmoV1, BuggyInventory, Inventory, only_valid
 
 # --------------------------------------------------------------------------- #
@@ -137,6 +136,17 @@ def test_counter_is_shared_with_subclasses():
     # ``cls`` w metodzie klasowej oznacza klasę, na której wywołano metodę,
     # więc licznik klasy bazowej widzi także obiekty podklasy.
     assert Ammo.created_count() == 1
+
+
+def test_counter_reset_is_shared_with_subclasses():
+    class SteelAmmo(Ammo):
+        pass
+
+    SteelAmmo("9mm", 5)
+    SteelAmmo.reset_counter()
+
+    assert Ammo.created_count() == 0
+    assert SteelAmmo.created_count() == 0
 
 
 def test_invalid_caliber_rejected_in_constructor():

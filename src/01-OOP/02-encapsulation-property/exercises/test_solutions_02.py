@@ -13,7 +13,6 @@ Testy pokazują trzy wzorce, które wykorzystasz w każdym kolejnym zadaniu:
 from __future__ import annotations
 
 import pytest
-
 from solutions_02 import (
     FrozenPoint,
     FrozenPointDataclass,
@@ -76,6 +75,11 @@ def test_equality_uses_tolerance():
     assert Temperature(25) == Temperature(25.0000000001)
     assert Temperature(25) != Temperature(26)
     assert Temperature(25).__eq__("25") is NotImplemented
+
+
+def test_temperature_with_tolerant_equality_is_not_hashable():
+    with pytest.raises(TypeError):
+        hash(Temperature(25))
 
 
 # --------------------------------------------------------------------------- #

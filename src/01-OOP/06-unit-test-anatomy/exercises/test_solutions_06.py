@@ -15,7 +15,6 @@ from __future__ import annotations
 import random
 
 import pytest
-
 from config_reader import new_session_id
 from solutions_01 import Ammo
 from solutions_03 import Car, Engine

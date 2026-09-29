@@ -26,7 +26,6 @@ obiektu (np. pole ``immutable`` w dataclass zamrożonym).
 from __future__ import annotations
 
 import math
-
 from importlib import import_module
 
 # Importujemy ``Point`` z przykładu 01 (moduł leży w tym samym katalogu).

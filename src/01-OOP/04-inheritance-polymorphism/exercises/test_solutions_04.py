@@ -13,7 +13,6 @@ liście narzędzi** (``ALL_TOOLS``). Taki test:
 from __future__ import annotations
 
 import pytest
-
 from solutions_04 import (
     FancySaw,
     Hammer,
@@ -199,7 +198,8 @@ def test_kit_is_iterable(kit):
 
 
 def test_most_durable_returns_the_toughest_tool(kit):
-    assert kit.most_durable() is kit._tools[1]  # type: ignore[attr-defined]
+    most_durable = kit.most_durable()
+    assert most_durable is next(tool for tool in kit if tool.name == "piła")
 
 
 def test_adding_new_tool_type_requires_no_kit_change():

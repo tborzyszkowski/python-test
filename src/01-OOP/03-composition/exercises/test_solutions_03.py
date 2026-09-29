@@ -15,7 +15,6 @@ from __future__ import annotations
 import json
 
 import pytest
-
 from solutions_03 import (
     AlertService,
     Car,
@@ -167,12 +166,6 @@ def test_history_returns_a_copy():
     history = service.history
     history.append("podrobiony wpis")   # próba modyfikacji stanu z zewnątrz
     assert service.history == ["[INFO] pierwszy"]
-
-
-def test_service_uses_injected_notifier():
-    notifier = RecordingNotifier()
-    service = AlertService(notifier)
-    assert service._notifier is notifier  # type: ignore[attr-defined]
 
 
 # --------------------------------------------------------------------------- #

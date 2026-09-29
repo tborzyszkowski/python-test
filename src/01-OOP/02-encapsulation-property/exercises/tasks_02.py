@@ -120,7 +120,7 @@ class Rectangle:
     def is_square(self) -> bool:
         raise NotImplementedError("Zadanie 2: zaimplementuj is_square")
 
-    def scale(self, factor: Number) -> "Rectangle":
+    def scale(self, factor: Number) -> Rectangle:
         raise NotImplementedError("Zadanie 2: zaimplementuj scale")
 
 

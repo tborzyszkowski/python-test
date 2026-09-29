@@ -63,7 +63,7 @@ class Hero:
     # Metody klasowe - działają na klasie, nie na instancji               #
     # ------------------------------------------------------------------ #
     @classmethod
-    def from_wounded(cls, name: str) -> "Hero":
+    def from_wounded(cls, name: str) -> Hero:
         """Alternatywny konstruktor: bohater zaczyna z 25 HP.
 
         ``cls`` (a nie ``Hero``) sprawia, że metoda działa poprawnie także
@@ -105,6 +105,7 @@ def demo_class_vs_instance_state() -> None:
 
     print(f"Hero.population()   -> {Hero.population()}   # stan KLASY")
     print(f"aragorn.hp          -> {aragorn.hp}          # stan INSTANCJI")
+    print(f"legolas.hp          -> {legolas.hp}           # druga instancja")
     print(f"aragorn.is_alive    -> {aragorn.is_alive}")
     print("'hp' w aragorn.__dict__ ->", "hp" in aragorn.__dict__)
     print("'_hp' w aragorn.__dict__ ->", "_hp" in aragorn.__dict__)

@@ -27,9 +27,8 @@ import random
 import string
 from datetime import datetime
 
-import pytest
-
 import config_reader
+import pytest
 from config_reader import load_config, new_session_id, read_timeout, save_config, utc_timestamp
 from solutions_01 import Ammo
 

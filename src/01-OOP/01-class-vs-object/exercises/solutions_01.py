@@ -74,15 +74,15 @@ class Ammo(AmmoV1):
     # --- metody klasowe: operują na stanie klasy -------------------------- #
     @classmethod
     def created_count(cls) -> int:
-        return cls.total_created
+        return Ammo.total_created
 
     @classmethod
     def reset_counter(cls) -> None:
         """Izolacja stanu w testach - patrz ``reset_ammo_counter`` w testach."""
-        cls.total_created = 0
+        Ammo.total_created = 0
 
     @classmethod
-    def box_of(cls, caliber: str, boxes: int = 1) -> list["Ammo"]:
+    def box_of(cls, caliber: str, boxes: int = 1) -> list[Ammo]:
         """Alternatywny konstruktor: ``boxes`` magazynków po 30 naboi."""
         return [cls(caliber, 30) for _ in range(boxes)]
 

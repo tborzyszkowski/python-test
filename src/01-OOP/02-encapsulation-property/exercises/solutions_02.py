@@ -73,9 +73,6 @@ class Temperature:
             return NotImplemented
         return math.isclose(self._celsius, other._celsius, abs_tol=1e-9)
 
-    def __hash__(self) -> int:
-        return hash(round(self._celsius, 9))
-
 
 # --------------------------------------------------------------------------- #
 # Rozwiązanie 2 - Rectangle
@@ -124,7 +121,7 @@ class Rectangle:
     def is_square(self) -> bool:
         return math.isclose(self._width, self._height)
 
-    def scale(self, factor: Number) -> "Rectangle":
+    def scale(self, factor: Number) -> Rectangle:
         factor_value = _require_number(factor, "factor", "Rectangle")
         if factor_value <= 0:
             raise ValueError(f"scale factor must be positive, got {factor_value}")
@@ -214,7 +211,7 @@ class FrozenPoint:
     def y(self) -> float:
         return self._y
 
-    def shift(self, dx: Number, dy: Number) -> "FrozenPoint":
+    def shift(self, dx: Number, dy: Number) -> FrozenPoint:
         return FrozenPoint(self._x + dx, self._y + dy)
 
     def __eq__(self, other: object) -> bool:
@@ -236,7 +233,7 @@ class FrozenPointDataclass:
     x: float
     y: float
 
-    def shift(self, dx: Number, dy: Number) -> "FrozenPointDataclass":
+    def shift(self, dx: Number, dy: Number) -> FrozenPointDataclass:
         return FrozenPointDataclass(self.x + dx, self.y + dy)
 
 

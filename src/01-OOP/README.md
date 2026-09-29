@@ -108,10 +108,10 @@ python -m pytest src/01-OOP -c src/01-OOP/pytest.ini -v
 python -m pytest src/01-OOP/05-aaa-pattern -c src/01-OOP/pytest.ini -v
 
 # Wybrany plik i wybrany test (filtr po nazwie)
-python -m pytest src/01-OOP/07-testing-frameworks/exercises/test_solutions_07.py -k "aaa" -v
+python -m pytest src/01-OOP/07-testing-frameworks/exercises/test_solutions_07.py -k "slugify" -v
 
-# Pojedynczy przykład (każdy plik examples/ ma sekcję __main__)
-python src/01-OOP/04-inheritance-polymorphism/examples/02_tools_polymorphism.py
+# Pojedynczy skrypt demonstracyjny
+python src/01-OOP/04-inheritance-polymorphism/examples/01_tools_polymorphism.py
 
 # Z pokryciem kodu
 python -m pytest src/01-OOP -c src/01-OOP/pytest.ini --cov=src/01-OOP --cov-report=term-missing

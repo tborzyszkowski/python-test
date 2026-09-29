@@ -17,7 +17,6 @@ Ten plik pokazuje **to samo** oczekiwanie napisane trzy razy:
 from __future__ import annotations
 
 import pytest
-
 from solutions_02 import Rectangle, Temperature
 
 # --------------------------------------------------------------------------- #

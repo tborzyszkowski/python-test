@@ -138,8 +138,14 @@ def render_with_mermaid_ink(source: Path, target: Path) -> bool:
 def render(source: Path, engine: str, scale: int, force: bool, dry_run: bool) -> bool:
     target = source.with_suffix(".png")
     if target.exists() and not force:
-        print(f"  pomijam (PNG istnieje): {target.relative_to(MODULE_ROOT)}")
-        return True
+        try:
+            is_current = target.stat().st_mtime >= source.stat().st_mtime
+        except OSError:
+            is_current = False
+        if is_current:
+            print(f"  pomijam (PNG aktualny): {target.relative_to(MODULE_ROOT)}")
+            return True
+        print(f"  odświeżam (PNG starszy od .mmd): {target.relative_to(MODULE_ROOT)}")
     if dry_run:
         print(f"  [dry-run] {source.relative_to(MODULE_ROOT)} -> {target.name}")
         return True

@@ -18,7 +18,6 @@ Trzy zasady, które ilustrujemy:
 from __future__ import annotations
 
 import pytest
-
 from solutions_01 import AmmoV1
 from solutions_03 import Car, Engine
 

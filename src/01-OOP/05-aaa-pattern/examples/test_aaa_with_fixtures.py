@@ -19,7 +19,6 @@ różnica między dobrą a złą abstrakcją.
 from __future__ import annotations
 
 import pytest
-
 from solutions_02 import Rectangle, Temperature
 
 # --------------------------------------------------------------------------- #

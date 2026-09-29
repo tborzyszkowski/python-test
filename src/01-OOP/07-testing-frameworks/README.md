@@ -163,8 +163,10 @@ Reguły nazewnictwa:
 ### 5. Cztery sposoby uruchamiania
 
 ```bash
-# 1. unittest - jeden plik
-python -m unittest src/01-OOP/07-testing-frameworks/examples/test_unittest_calculator.py -v
+# 1. unittest - jeden plik (z katalogu examples)
+cd src/01-OOP/07-testing-frameworks/examples
+python -m unittest test_unittest_calculator -v
+cd ../../../..
 
 # 2. unittest - discover (cały katalog)
 python -m unittest discover -s src/01-OOP/07-testing-frameworks/examples -v

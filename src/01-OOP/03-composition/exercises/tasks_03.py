@@ -13,7 +13,6 @@ from __future__ import annotations
 
 from typing import Protocol
 
-
 # --------------------------------------------------------------------------- #
 # Zadanie 1 - kompozycja i delegacja (3 pkt)
 # --------------------------------------------------------------------------- #

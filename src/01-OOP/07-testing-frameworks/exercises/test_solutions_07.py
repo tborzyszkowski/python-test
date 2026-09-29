@@ -23,7 +23,6 @@ from __future__ import annotations
 import unittest
 
 import pytest
-
 from string_utils import normalize, slugify, truncate, word_count
 
 # =========================================================================== #
