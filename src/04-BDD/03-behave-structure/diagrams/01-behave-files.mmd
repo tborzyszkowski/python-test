@@ -1,0 +1,5 @@
+flowchart LR
+    F["features/*.feature"] --> B["Behave"]
+    B --> E["environment.py"]
+    B --> S["features/steps/*.py"]
+    S --> D["src/domain.py"]

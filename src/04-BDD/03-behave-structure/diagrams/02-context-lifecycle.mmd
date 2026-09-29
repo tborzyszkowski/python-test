@@ -1,0 +1,10 @@
+sequenceDiagram
+    participant H as Hook
+    participant C as Context
+    participant G as Given
+    participant W as When
+    participant T as Then
+    H->>C: prepare scenario
+    G->>C: store domain objects
+    W->>C: mutate/use SUT
+    T->>C: verify observable result

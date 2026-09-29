@@ -9,6 +9,7 @@ dependencies = [
     "pytest>=7.4",
     "pytest-cov>=4.1",
     "ruff>=0.8",
+    "behave>=1.2.6",
 ]
 
 [tool.pytest.ini_options]

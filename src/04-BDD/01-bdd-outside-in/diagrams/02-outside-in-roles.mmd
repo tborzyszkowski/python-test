@@ -1,0 +1,10 @@
+sequenceDiagram
+    participant C as Customer
+    participant BA as Business Analyst
+    participant D as Developer
+    participant T as Tester
+    C->>BA: value and rules
+    BA->>T: Gherkin examples
+    T->>D: failing acceptance scenario
+    D->>T: implementation and passing scenario
+    T-->>C: behavior confirmed

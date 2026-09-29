@@ -67,6 +67,7 @@ python -m venv .venv
 .venv\Scripts\python.exe -m pytest src\01-OOP -c src\01-OOP\pytest.ini -v
 .venv\Scripts\python.exe -m pytest src\02-TDD -c src\02-TDD\pytest.ini -v
 .venv\Scripts\python.exe -m pytest src\03-test_double -c src\03-test_double\pytest.ini -v
+.venv\Scripts\python.exe -m behave src\04-BDD\04-passenger-flights\features
 
 # Z pokryciem kodu (coverage):
 .venv\Scripts\python.exe -m pytest src\01-OOP -c src\01-OOP\pytest.ini --cov=src --cov-report=term-missing
@@ -90,6 +91,7 @@ w katalogach `diagrams/` każdego tematu. Renderowanie do PNG:
 # usługi online (kroki.io, potem mermaid.ink) - wymaga połączenia z Internetem
 .venv\Scripts\python.exe src\01-OOP\generate_diagrams.py
 .venv\Scripts\python.exe src\02-TDD\generate_diagrams.py
+.venv\Scripts\python.exe src\04-BDD\generate_diagrams.py
 
 # Tylko wybrane tematy / nadpisanie istniejących plików PNG:
 .venv\Scripts\python.exe src\01-OOP\generate_diagrams.py --only 05-aaa-pattern --force
@@ -127,6 +129,8 @@ folderu wystarczy:
 - [`src/03-test_double/README.md`](src/03-test_double/README.md) - taksonomia
   Dummy, Stub, Fake, Spy i Mock, asercje wartości/stanu/interakcji,
   `unittest.mock`, `monkeypatch` oraz izolowanie I/O i SSO.
+- [`src/04-BDD/README.md`](src/04-BDD/README.md) - BDD, Outside-In, Gherkin,
+  Behave oraz domena lotów ekonomicznych i premium.
 
 ## Jak wybrać temat na start?
 
@@ -146,6 +150,7 @@ Dla studentów, którzy znają już podstawy Pythona, polecana kolejność pracy
 12. **`03-test_double/01-test-double-taxonomy`** - role atrap testowych.
 13. **`03-test_double/03-racing-car-and-html`** - Stub czujnika i Fake `StringIO`.
 14. **`03-test_double/04-sso-registry`** - Spy i Mock w interakcji z rejestrem.
+15. **`04-BDD/04-passenger-flights`** - scenariusze Gherkin i Behave dla lotów.
 
 Sugerowany rytm nauki:
 
@@ -208,6 +213,15 @@ python-test/
         ├── 02-verification-and-tools/
         ├── 03-racing-car-and-html/
         └── 04-sso-registry/
+      └── 04-BDD/
+        ├── README.md
+        ├── pytest.ini
+        ├── conftest.py
+        ├── generate_diagrams.py
+        ├── 01-bdd-outside-in/
+        ├── 02-gherkin-language/
+        ├── 03-behave-structure/
+        └── 04-passenger-flights/
 ```
 
 Każdy katalog tematyczny zawiera:
@@ -233,6 +247,7 @@ Każdy katalog tematyczny zawiera:
 | pytest      | ≥ 7.4   | framework do testów jednostkowych        |
 | pytest-cov  | ≥ 4.1   | pokrycie kodu testami (`coverage`)       |
 | ruff        | ≥ 0.8   | lintowanie i kontrola stylu              |
+| behave      | ≥ 1.2.6 | automatyzacja scenariuszy Gherkin        |
 
 ## Konwencje w repozytorium
 

@@ -1,0 +1,9 @@
+stateDiagram-v2
+    [*] --> Empty
+    Empty --> EconomyWithStandard: add standard
+    Empty --> EconomyWithVip: add VIP
+    Empty --> PremiumWithVip: add VIP to premium
+    Empty --> Empty: add standard to premium / reject
+    EconomyWithStandard --> Empty: remove standard
+    EconomyWithVip --> EconomyWithVip: remove VIP / reject
+    PremiumWithVip --> PremiumWithVip: duplicate / reject

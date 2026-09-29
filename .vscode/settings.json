@@ -48,6 +48,15 @@
     ,"src/03-test_double/03-racing-car-and-html/exercises"
     ,"src/03-test_double/04-sso-registry/examples"
     ,"src/03-test_double/04-sso-registry/exercises"
+    ,"src/04-BDD"
+    ,"src/04-BDD/01-bdd-outside-in/examples"
+    ,"src/04-BDD/01-bdd-outside-in/exercises"
+    ,"src/04-BDD/02-gherkin-language/examples"
+    ,"src/04-BDD/02-gherkin-language/exercises"
+    ,"src/04-BDD/03-behave-structure/examples"
+    ,"src/04-BDD/03-behave-structure/exercises"
+    ,"src/04-BDD/04-passenger-flights/src"
+    ,"src/04-BDD/04-passenger-flights/exercises"
   ],
   "files.encoding": "utf8",
   "files.eol": "\n",
