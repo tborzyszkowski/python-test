@@ -58,7 +58,7 @@ from __future__ import annotations
 # PRZYKŁADY TESTÓW DO POPRAWY (napisz ich wersje zgodne z zasadami)
 # --------------------------------------------------------------------------- #
 #
-# ❌ 1. Nazwa bez informacji + trzy własności naraz:
+# [ZLE] 1. Nazwa bez informacji + trzy własności naraz:
 #
 #     def test_car():
 #         car = Car("Skoda", Engine(110, 5.5))
@@ -67,7 +67,7 @@ from __future__ import annotations
 #         assert car.range_km > 0
 #         assert car.fuel_l < car.tank_l
 #
-# ❌ 2. Stan współdzielony między testami:
+# [ZLE] 2. Stan współdzielony między testami:
 #
 #     car = Car("Skoda", Engine(110, 5.5))        # obiekt na poziomie modułu!
 #
@@ -79,21 +79,21 @@ from __future__ import annotations
 #         car.drive(100)                          # zależy od tego, czy był test A
 #         assert car.fuel_l == 44.5
 #
-# ❌ 3. Test zależny od czasu/losowości:
+# [ZLE] 3. Test zależny od czasu/losowości:
 #
 #     def test_session_id():
-#         assert new_session_id() == new_session_id()   # ❌ losowe != losowe
+#         assert new_session_id() == new_session_id()   # [ZLE] losowe != losowe
 #
-# ❌ 4. Test „przechodzi zawsze”:
-#
-#     def test_drive():
-#         car = Car("Skoda", Engine(110, 5.5))
-#         car.drive(100)
-#         assert car.fuel_l is not None                 # ❌ asercja bez treści
-#
-# ❌ 5. Test zaglądający do wnętrza obiektu:
+# [ZLE] 4. Test „przechodzi zawsze”:
 #
 #     def test_drive():
 #         car = Car("Skoda", Engine(110, 5.5))
 #         car.drive(100)
-#         assert car._fuel_l == 44.5                    # ❌ pole prywatne
+#         assert car.fuel_l is not None                 # [ZLE] asercja bez treści
+#
+# [ZLE] 5. Test zaglądający do wnętrza obiektu:
+#
+#     def test_drive():
+#         car = Car("Skoda", Engine(110, 5.5))
+#         car.drive(100)
+#         assert car._fuel_l == 44.5                    # [ZLE] pole prywatne

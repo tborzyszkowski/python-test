@@ -78,7 +78,7 @@ def use_many(tools: list[ToolLike], target: str) -> list[str]:
 # Antywzorzec: rozgałęzianie po typie
 # --------------------------------------------------------------------------- #
 def describe_by_isinstance(tool: object) -> str:
-    """❌ Antywzorzec: każde nowe narzędzie wymaga zmiany tej funkcji."""
+    """[ZLE] Antywzorzec: każde nowe narzędzie wymaga zmiany tej funkcji."""
     if isinstance(tool, LegacyScrewdriver):
         return "śrubokręt"
     if isinstance(tool, BrokenGadget):

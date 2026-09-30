@@ -26,12 +26,12 @@ from solutions_03 import Car, Engine
 # --------------------------------------------------------------------------- #
 
 
-def test_car_1():                     # ❌ nazwa nie mówi nic o zachowaniu
+def test_car_1():                     # [ZLE] nazwa nie mówi nic o zachowaniu
     car = Car("Skoda", Engine(110, 5.5), tank_l=50)
     assert car.fuel_l == 50
 
 
-def test_drive_reduces_fuel():        # ✅ co testujemy i czego oczekujemy
+def test_drive_reduces_fuel():        # [OK] co testujemy i czego oczekujemy
     # Arrange
     car = Car("Skoda", Engine(110, 5.5), tank_l=50)
 
@@ -42,7 +42,7 @@ def test_drive_reduces_fuel():        # ✅ co testujemy i czego oczekujemy
     assert car.fuel_l == pytest.approx(44.5)   # 100 km * 5.5 l/100 km
 
 
-def test_negative_amount_is_rejected():   # ✅ warunek + oczekiwanie
+def test_negative_amount_is_rejected():   # [OK] warunek + oczekiwanie
     # Arrange
     car = Car("Skoda", Engine(110, 5.5), tank_l=50)
 
@@ -63,7 +63,7 @@ def test_negative_amount_is_rejected():   # ✅ warunek + oczekiwanie
 # --------------------------------------------------------------------------- #
 
 
-def test_car_everything():            # ❌ 4 własności, 4 możliwe przyczyny porażki
+def test_car_everything():            # [ZLE] 4 własności, 4 możliwe przyczyny porażki
     car = Car("Skoda", Engine(110, 5.5), tank_l=50)
     assert car.fuel_l == 50
     car.drive(100)
@@ -74,7 +74,7 @@ def test_car_everything():            # ❌ 4 własności, 4 możliwe przyczyny 
     assert car.range_km == pytest.approx(181.8181818, rel=1e-6)
 
 
-def test_car_starts_with_full_tank():          # ✅
+def test_car_starts_with_full_tank():          # [OK]
     # Arrange + Act
     car = Car("Skoda", Engine(110, 5.5), tank_l=50)
 
@@ -82,7 +82,7 @@ def test_car_starts_with_full_tank():          # ✅
     assert car.fuel_l == pytest.approx(50.0)
 
 
-def test_refuel_never_exceeds_tank_capacity():  # ✅
+def test_refuel_never_exceeds_tank_capacity():  # [OK]
     # Arrange
     car = Car("Skoda", Engine(110, 5.5), tank_l=50)
     car.drive(500)
@@ -94,7 +94,7 @@ def test_refuel_never_exceeds_tank_capacity():  # ✅
     assert car.fuel_l == pytest.approx(50.0)
 
 
-def test_range_is_derived_from_current_fuel():  # ✅
+def test_range_is_derived_from_current_fuel():  # [OK]
     # Arrange
     car = Car("Skoda", Engine(110, 5.5), tank_l=50)
     car.fuel_l = 11                       # 11 l / 5.5 l/100 km * 100 = 200 km
@@ -111,7 +111,7 @@ def test_range_is_derived_from_current_fuel():  # ✅
 # --------------------------------------------------------------------------- #
 
 
-def test_full_purchase_flow():        # ❌ to jest test integracyjny, nie jednostkowy
+def test_full_purchase_flow():        # [ZLE] to jest test integracyjny, nie jednostkowy
     """Woła trzy metody i sprawdza sześć rzeczy - trudno wskazać winowajcę."""
     ammo = AmmoV1("9mm", 10)
     remaining = ammo.spend(4)
@@ -123,7 +123,7 @@ def test_full_purchase_flow():        # ❌ to jest test integracyjny, nie jedno
     assert ammo.rounds > 0
 
 
-def test_spend_returns_remaining_rounds():   # ✅ jedna metoda, jedna własność
+def test_spend_returns_remaining_rounds():   # [OK] jedna metoda, jedna własność
     # Arrange
     ammo = AmmoV1("9mm", 10)
 
@@ -134,7 +134,7 @@ def test_spend_returns_remaining_rounds():   # ✅ jedna metoda, jedna własnoś
     assert remaining == 6
 
 
-def test_repr_shows_caliber_and_rounds():    # ✅ kolejna własność = kolejny test
+def test_repr_shows_caliber_and_rounds():    # [OK] kolejna własność = kolejny test
     # Arrange + Act
     text = repr(AmmoV1("9mm", 6))
 
@@ -142,7 +142,7 @@ def test_repr_shows_caliber_and_rounds():    # ✅ kolejna własność = kolejny
     assert text == "AmmoV1(caliber='9mm', rounds=6)"
 
 
-def test_equality_ignores_object_identity():  # ✅
+def test_equality_ignores_object_identity():  # [OK]
     # Arrange + Act + Assert
     assert AmmoV1("9mm", 6) == AmmoV1("9mm", 6)
 

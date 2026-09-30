@@ -46,12 +46,12 @@ from shopping_cart import ShoppingCart, parse_price  # noqa: F401  (potrzebne w 
 # PRZYKŁADY TESTÓW NAPISANYCH ŹLE (przerób je na AAA)
 # --------------------------------------------------------------------------- #
 
-# ❌ Stan współdzielony przez wszystkie przypadki - kolejność wykonania zmienia wynik.
+# [ZLE] Stan współdzielony przez wszystkie przypadki - kolejność wykonania zmienia wynik.
 _SHARED_CART = ShoppingCart()
 
 
 def naive_add_and_remove():
-    """❌ Brak Arrange/Act/Assert; sprawdza trzy rzeczy naraz; używa stanu globalnego."""
+    """[ZLE] Brak Arrange/Act/Assert; sprawdza trzy rzeczy naraz; używa stanu globalnego."""
     _SHARED_CART.add("apple", 100)
     _SHARED_CART.add("banana", 200)
     _SHARED_CART.remove("apple")
@@ -61,27 +61,27 @@ def naive_add_and_remove():
 
 
 def naive_discount():
-    """❌ Asercje bez wartości diagnostycznej (``< 1000``, ``is not None``)."""
+    """[ZLE] Asercje bez wartości diagnostycznej (``< 1000``, ``is not None``)."""
     cart = ShoppingCart()
     cart.add("apple", 1000)
     cart.apply_discount(10)
-    assert cart.subtotal_cents < 1000              # ❌ nie mówi ILE ma być
-    assert cart.apply_discount is not None         # ❌ zawsze prawdziwe
-    assert cart.total_cents == cart.subtotal_cents + cart.tax_cents   # ❌ powtarza implementację
+    assert cart.subtotal_cents < 1000              # [ZLE] nie mówi ILE ma być
+    assert cart.apply_discount is not None         # [ZLE] zawsze prawdziwe
+    assert cart.total_cents == cart.subtotal_cents + cart.tax_cents   # [ZLE] powtarza implementację
 
 
 def naive_exception():
-    """❌ Sprawdza tylko, że 'coś poleciało' - nie typ, nie komunikat."""
+    """[ZLE] Sprawdza tylko, że 'coś poleciało' - nie typ, nie komunikat."""
     try:
         parse_price("abc")
-    except Exception:                              # ❌ łapie wszystko
+    except Exception:                              # [ZLE] łapie wszystko
         pass
     else:
         raise AssertionError("spodziewano się błędu")
 
 
 def naive_implementation_coupling():
-    """❌ Test zależy od reprezentacji wewnętrznej - refaktoring go zepsuje."""
+    """[ZLE] Test zależy od reprezentacji wewnętrznej - refaktoring go zepsuje."""
     cart = ShoppingCart()
     cart.add("apple", 100, quantity=2)
-    assert cart._items == {"apple": (100, 2)}      # ❌ prywatne pole!
+    assert cart._items == {"apple": (100, 2)}      # [ZLE] prywatne pole!

@@ -127,9 +127,9 @@ class ToolBrokenError(ToolError):
 #
 #         def effect_on(self, target: str) -> str:
 #             if len(target) < 3:
-#                 return None                     # ❌ łamie typ zwracany
+#                 return None                     # [ZLE] łamie typ zwracany
 #             if target == "metal":
-#                 raise RuntimeError("nie lubię metalu")   # ❌ nieoczekiwany wyjątek
+#                 raise RuntimeError("nie lubię metalu")   # [ZLE] nieoczekiwany wyjątek
 #             return f"Piłuję {target}"
 #
 # Objawy w kodzie klienckim:

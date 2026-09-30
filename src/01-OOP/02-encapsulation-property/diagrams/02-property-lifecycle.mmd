@@ -9,19 +9,19 @@ sequenceDiagram
     participant F as pole _x
 
     C->>P: p = Point(3, 4)
-    P->>S: self.x = 3 (konstruktor tez idzie przez setter)
+    P->>S: self.x = 3  (konstruktor też idzie przez setter)
     S->>V: _as_number(3, "x")
-    alt wartosc poprawna
+    alt wartość poprawna
         V-->>S: 3.0
         S->>F: self._x = 3.0
-    else wartosc bledna (np. "abc")
+    else wartość błędna (np. "abc")
         V-->>C: raise TypeError
     end
 
     C->>P: p.x = 6
-    P->>S: (jak wyzej)
+    P->>S: (jak wyżej)
 
     C->>P: odczyt p.magnitude
     P->>F: odczyt _x, _y
     P-->>C: hypot(6, 4) = 7.211...
-    Note over C,P: brak settera => p.magnitude = 10 podnosi AttributeError
+    Note over C,P: brak settera → p.magnitude = 10 → AttributeError
