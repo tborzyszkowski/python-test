@@ -86,7 +86,7 @@ def main() -> None:
     cart = ShoppingCart()
     cart.add(book, quantity=3)
     cart.enable_three_for_two("books")
-    print("subtotal:", cart.subtotal_cents)
+    print("subtotal:", cart.subtotal_cents())
     print("three for two:", cart.promotion_discount_cents())
     print("total:", cart.total_cents())
 

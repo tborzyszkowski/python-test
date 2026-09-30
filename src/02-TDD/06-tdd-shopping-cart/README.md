@@ -43,14 +43,14 @@ flowchart TB
 
 ## Kod i testy
 
-Kod: [examples/shopping_cart.py](examples/shopping_cart.py).
-Testy: [examples/test_shopping_cart.py](examples/test_shopping_cart.py).
+Kod: [examples/tdd_shopping_cart.py](examples/tdd_shopping_cart.py).
+Testy: [examples/test_tdd_shopping_cart.py](examples/test_tdd_shopping_cart.py).
 
 ```python
 cart.add(Product("book", "ksiazka", "books", 5000), quantity=3)
 cart.add(Product("pen", "dlugopis", "stationery", 100), quantity=2)
 cart.apply_threshold_discount(minimum_cents=10_000, percent=10)
-assert cart.total_cents() == 13_590
+assert cart.total_cents() == 13_680
 ```
 
 Każda linia powyżej może być osobnym krokiem TDD: najpierw test na pusty
@@ -76,7 +76,7 @@ koszyk, potem dodawanie, potem reguła rabatowa.
 
 ```bash
 python -m compileall src/02-TDD/06-tdd-shopping-cart
-python src/02-TDD/06-tdd-shopping-cart/examples/shopping_cart.py
+python src/02-TDD/06-tdd-shopping-cart/examples/tdd_shopping_cart.py
 python -m pytest src/02-TDD/06-tdd-shopping-cart -v
 ```
 

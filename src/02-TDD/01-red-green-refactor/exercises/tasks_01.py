@@ -1,6 +1,6 @@
 """Zadania do tematu 01.
 
-Nie zaczynaj od ``solutions_01.py``. Najpierw uruchom pusty test, zapisz Red,
+Nie zaczynaj od ``tdd_solutions_01.py``. Najpierw uruchom pusty test, zapisz Red,
 potem implementuj minimalny Green.
 """
 

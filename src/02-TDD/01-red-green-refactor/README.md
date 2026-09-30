@@ -96,8 +96,8 @@ a testy w [examples/test_todo_list.py](examples/test_todo_list.py).
 |---|---|---|---|
 | 1 | nowa lista ma zero zadań oczekujących | `pending()` zwraca `[]` | nazwa `pending` opisuje zapytanie |
 | 2 | dodanie tekstu tworzy zadanie | lista przechowuje tekst | wydzielamy `_items` |
-| 3 | ukończenie zadania usuwa je z pending | zmiana flagi `done` | helper `_find` centralizuje wyszukiwanie |
-| 4 | nie można ukończyć nieistniejącego zadania | `KeyError` | komunikat wyjątku zawiera identyfikator |
+| 3 | ukończenie zadania usuwa je z pending | zmiana flagi `done` | wyszukiwanie po tytule w jednej metodzie `complete()` |
+| 4 | nie można ukończyć nieistniejącego zadania | `KeyError` | komunikat wyjątku zawiera tytuł zadania |
 | 5 | zadanie nie może być puste | `ValueError` | walidacja na wejściu |
 
 Diagram przepływu jednej iteracji:

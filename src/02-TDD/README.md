@@ -34,6 +34,8 @@ Po przerobieniu modułu student powinien:
    i reguły rabatowe rozwijane krok po kroku.
 7. [07-tdd-bank-account](07-tdd-bank-account/README.md) - konto bankowe i
    rejestr transakcji rozwijane krok po kroku.
+8. [08-tdd-review-and-practice](08-tdd-review-and-practice/README.md) -
+   podsumowanie cyklu TDD i laboratorium końcowe.
 
 ## Mapa modułu
 
@@ -94,7 +96,8 @@ flowchart LR
 2. Uruchom testy przed zmianą kodu i zapisz wynik.
 3. Dla projektów 05-07 wykonuj kroki w README w kolejności: Red, Green, Refactor.
 4. Nie przeskakuj od razu do rozwiązania; plik `tasks_XX.py` opisuje kontrakt,
-   a `solutions_XX.py` pokazuje jedną z możliwych implementacji.
+   a `tdd_solutions_XX.py` (w temacie 08: `solutions_08.py`) pokazuje jedną
+   z możliwych implementacji.
 5. Po każdej iteracji uruchom testy i zapisz, jaki błąd został wykryty.
 
 ## Kryteria oceny

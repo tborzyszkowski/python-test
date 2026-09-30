@@ -25,7 +25,7 @@ sequenceDiagram
     participant H as History
     T->>A: deposit(1000)
     A->>H: Transaction(deposit, +1000)
-    T->>A: transfer(300, fee=10)
+    T->>A: transfer(300, fee_cents=10)
     A->>H: Transaction(transfer, -300)
     A->>H: Transaction(fee, -10)
     A-->>T: balance = 690

@@ -60,13 +60,10 @@ a nie kolejność instrukcji w środku.
 
 ```python
 # Dług: logika cen, rabatu i podatku wymieszana w jednej funkcji.
-def total_legacy(items, discount):
-    value = 0
-    for item in items:
-        value += item["price"] * item["quantity"]
-    if discount > 0:
-        value = value - value * discount / 100
-    return round(value * 1.23)
+def total_legacy(items, discount_percent):
+    gross = sum(item["price_cents"] * item["quantity"] for item in items)
+    discounted = int(gross * (100 - discount_percent) // 100)
+    return discounted + int(discounted * 0.23)
 ```
 
 Refaktoryzacja wydziela obiekty i reguły, ale testy kontraktu pozostają takie same.
