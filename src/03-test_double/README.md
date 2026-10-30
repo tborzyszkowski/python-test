@@ -79,6 +79,148 @@ Najpierw nazwij pytanie testu:
 - „Jak zmienił się obiekt?” -> Fake lub prawdziwy obiekt i asercja stanu.
 - „Czy zależność została wywołana?” -> Spy/Mock i asercja interakcji.
 
+## Porównanie narzędzi: Mock vs monkeypatch vs Spy
+
+| Narzędzie | Rola | Oczekiwania? | Automatyczna weryfikacja? | Kiedy używać |
+|---|---|:---:|:---:|---|
+| **unittest.mock.Mock** | Mock | ✓ | ✓ | Interakcje z dokładnym kontraktem, szybka weryfikacja |
+| **unittest.mock.patch** | Mock/Stub | ✓ | ✓ | Podmiana modułów, funkcji, metod na poziomie globalnym |
+| **pytest monkeypatch** | Mock/Stub | ✗ | ✗ | Zmienne środowiskowe, atrybuty, mniej restrykcyjne |
+| **Spy (własny)** | Spy | ✗ | ✗ | Elastyczność, własna logika, bardziej czytelne `calls` |
+| **Stub (własny)** | Stub | ✗ | ✗ | Powrót wartości, uproszczona domena |
+| **Fake (własny)** | Fake | ✗ | ✗ | Działająca uproszczona implementacja (np. in-memory DB) |
+
+**Reguła**: zacznij od `Mock`, jeśli test staje się zbyt szczegółowy → przejdź na `Spy`, jeśli potrzebujesz elastyczności → zbuduj `Fake`, jeśli wymagana jest prawdziwa logika.
+
+## Anti-patterns: kiedy Double robi się zbyt skomplikowany
+
+### 1. Over-mocking: mockowanie całego stosu
+
+❌ **Źle**: Mockujesz każdy poziom aplikacji.
+
+```python
+def test_user_creation_with_all_mocks():
+    db = Mock(spec=Database)
+    cache = Mock(spec=Cache)
+    logger = Mock(spec=Logger)
+    email_service = Mock(spec=EmailService)
+    service = UserService(db, cache, logger, email_service)
+    # Test sprawdza 15 interakcji zamiast logiki
+```
+
+✅ **Dobrze**: Mock tylko tę zależność, której izolacja coś zmienia.
+
+```python
+def test_user_creation_sends_email():
+    email_service = Mock(spec=EmailService)
+    service = UserService(Database(), email_service)  # prawdziwa baza
+    service.create_user("john@example.com")
+    email_service.send.assert_called_once()
+```
+
+### 2. Mock brittle tests: za szczegółowe asercje
+
+❌ **Źle**: Test załamuje się na każdej zmianie implementacji.
+
+```python
+def test_brittle():
+    dependency = Mock()
+    service.do_work(dependency)
+    # Szczegółowa kolejność i liczba argumentów
+    assert dependency.mock_calls == [
+        call.validate({"id": 1}),
+        call.fetch({"id": 1}),
+        call.transform({"id": 1}),
+        call.save({"id": 1})
+    ]
+```
+
+✅ **Dobrze**: Asercja tylko na kontrakcie, nie na implementacji.
+
+```python
+def test_contract():
+    dependency = Mock()
+    service.do_work(dependency)
+    # Ważny kontrakt: fetch musi być wywołany z ID
+    dependency.fetch.assert_called_once()
+    call_args = dependency.fetch.call_args[0]
+    assert call_args[0]["id"] == 1
+```
+
+### 3. Fake zamiast Stub: logika, której nie potrzebujesz
+
+❌ **Źle**: Fake staje się miniaturową wersją produkcji.
+
+```python
+class FakeDatabaseWithQueryLanguage:
+    def select(self, query_string):
+        # Implementujesz SQL parser...
+        # Implementujesz transaction logging...
+        # To już nie test, to test bazy!
+```
+
+✅ **Dobrze**: Fake zawiera tylko to, co test wymaga.
+
+```python
+class SimpleFakeDatabase:
+    def __init__(self):
+        self.data = {}
+    
+    def fetch(self, key):
+        if key not in self.data:
+            raise KeyError(f"Not found: {key}")
+        return self.data[key]
+```
+
+### 4. Mockowanie szczegółów implementacji
+
+❌ **Źle**: Mockujesz `_private_method`.
+
+```python
+def test_implementation_detail():
+    service.internal_cache = Mock()
+    service.do_work()
+    service.internal_cache.put.assert_called_once()
+```
+
+✅ **Dobrze**: Testuj przez publiczny interfejs.
+
+```python
+def test_through_public_api():
+    service = UserService(cache=FakeCache())
+    service.find_user(123)
+    assert service.find_user(123) == cached_result  # szybciej
+```
+
+### 5. Niewystarczająca izolacja: mocki tworzą złe czucie bezpieczeństwa
+
+❌ **Źle**: Test przechodzi z mockami, ale pada w produkcji.
+
+```python
+def test_with_mocks_only():
+    api = Mock()
+    api.get.return_value = {"status": "ok"}
+    service = ExternalAPIClient(api)
+    assert service.check_health() == "healthy"
+
+# W produkcji: ExternalAPIClient oczekuje innego formatu!
+```
+
+✅ **Dobrze**: Zintegruj co najmniej raz w pełnym teście.
+
+```python
+def test_with_integration():
+    # Snapshot test z prawdziwym API
+    actual_response = requests.get("https://api.example.com/health")
+    assert "status" in actual_response.json()
+
+def test_with_stub_unit():
+    api = Mock()
+    api.get.return_value = actual_response.json()
+    service = ExternalAPIClient(api)
+    assert service.check_health() == "healthy"
+```
+
 ## Literatura
 
 - Gerard Meszaros, *xUnit Test Patterns*: <http://xunitpatterns.com/Test%20Stub.html>

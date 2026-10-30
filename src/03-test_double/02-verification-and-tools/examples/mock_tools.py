@@ -7,6 +7,7 @@ from unittest.mock import MagicMock, Mock, patch
 
 
 class AlertService:
+    """Usługa alertów z wysyłką przez zależność sender."""
     def __init__(self, sender) -> None:
         self.sender = sender
 
@@ -15,10 +16,12 @@ class AlertService:
 
 
 def read_mode() -> str:
+    """Odczytaj tryb pracy z zmiennej środowiskowej."""
     return os.environ.get("APP_MODE", "production")
 
 
 def demo_mock() -> None:
+    """Demonstruje Mock: zwrócenie wartości i sprawdzenie interakcji."""
     sender = Mock()
     sender.send.return_value = "accepted"
     assert AlertService(sender).alert("hello") == "accepted"
@@ -27,18 +30,21 @@ def demo_mock() -> None:
 
 
 def demo_magic_mock() -> None:
+    """Demonstruje MagicMock: wspiera magiczne metody jak __len__."""
     cache = MagicMock()
     cache.__len__.return_value = 2
     print("MagicMock len:", len(cache))
 
 
 def demo_patch() -> None:
+    """Demonstruje patch: tymczasowa podmiana funkcji."""
     with patch("mock_tools.read_mode", return_value="test") as mocked:
         print("patched mode:", read_mode())
         mocked.assert_called_once_with()
 
 
 def main() -> None:
+    """Uruchom wszystkie demo narzędzi Mock, MagicMock i patch."""
     demo_mock()
     demo_magic_mock()
     demo_patch()

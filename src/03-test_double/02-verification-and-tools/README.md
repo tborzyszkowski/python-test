@@ -111,6 +111,96 @@ def test_env(monkeypatch):
 Można podmienić atrybut, funkcję, zmienną środowiskową albo katalog domowy.
 W odróżnieniu od Mocka `monkeypatch` sam nie zapisuje oczekiwań interakcji.
 
+## Zaawansowane techniki Mock
+
+### `side_effect`: sekwencja wartości i wyjątków
+
+```python
+client = Mock()
+client.get.side_effect = [
+    ConnectionError("timeout"),
+    ConnectionError("timeout"),
+    {"status": "ok"}
+]
+# Pierwsze dwa wołania rzucą exception, trzecie zwróci slownik
+result = client.get()  # ConnectionError
+result = client.get()  # ConnectionError
+result = client.get()  # {"status": "ok"}
+```
+
+### `PropertyMock`: mockowanie właściwości
+
+```python
+cache = Mock(spec=CacheManager)
+type(cache).size = PropertyMock(return_value=256)
+
+# Teraz cache.size zwroci 256, jak prawdziwa właściwość
+assert cache.size == 256
+```
+
+### `patch.object`: mockowanie metody konkretnego obiektu
+
+```python
+logger = Logger()
+processor = DataProcessor(logger)
+
+with patch.object(logger, "log") as mock_log:
+    processor.process("data")
+    mock_log.assert_called()  # tylko logger.log został zamockowany
+```
+
+### `call()`: dokładne sprawdzenie wołań
+
+```python
+sender = Mock()
+service.notify_users([1, 2, 3], "message")
+
+# Sprawdzenie każdego wołania z argumentami
+sender.send.assert_has_calls([
+    call(1, "message"),
+    call(2, "message"),
+    call(3, "message"),
+])
+```
+
+### `MagicMock`: wspiera magiczne metody
+
+```python
+cache = MagicMock()
+cache.__len__.return_value = 5
+cache.__enter__.return_value.read.return_value = "data"
+
+# Teraz cache wspiera: len(), with, iteracja itp.
+assert len(cache) == 5
+with cache as ctx:
+    print(ctx.read())  # "data"
+```
+
+### `reset_mock()`: wyczyszczenie historii wołań
+
+```python
+mock = Mock()
+mock.method()
+assert mock.method.call_count == 1
+
+mock.reset_mock()
+assert mock.method.call_count == 0  # historia wyczyszczona
+```
+
+## Przykłady zaawansowane
+
+Pełne przykłady zaawansowanych technik znajdują się w [advanced_mocks.py](examples/advanced_mocks.py)
+z testami w [test_advanced_mocks.py](examples/test_advanced_mocks.py).
+
+Obejmują:
+- Retry logic z `side_effect`
+- Iterator i context manager protocol w `MagicMock`
+- `spec` do ochrony przed literówkami
+- `PropertyMock` dla read-only właściwości
+- `patch.object` dla konkretnych instancji
+- `call()` matching dla wielokrotnych wołań
+- `reset_mock()` do ponownego użytku mock obiektu
+
 ## Zadania
 
 1. Zastąp ręcznego Spy obiektem `Mock` i użyj `assert_called_once_with`.

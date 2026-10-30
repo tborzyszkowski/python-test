@@ -60,10 +60,38 @@ sprawdzania kolejności prywatnych wywołań, jeśli nie jest to kontrakt.
 - state: `RecordingRegistry.calls`,
 - interaction: `Mock.assert_called_once_with(...)`.
 
+## Realistyczny scenariusz: zarządzanie sesją użytkownika
+
+W [realistic_sso.py](examples/realistic_sso.py) znajduje się bardziej złożony przykład
+z prawdziwym cyklem życia sesji:
+
+- Kilka operacji: `login()`, `logout()`, `validate_session()`, `get_current_user()`, `logout_all_user_sessions()`
+- Zarządzanie czasem wygaśnięcia tokenu
+- Rejestracja i wyrejestrowanie z SSO
+- Synchronizacja stanu lokalnego i zdalnego
+
+```python
+# Zalogowanie: rejestruje w SSO i tworzy lokalną sesję
+service.login("token-abc", "user-alice")
+
+# Walidacja: sprawdzić w SSO i lokalnie
+if service.validate_session("token-abc"):
+    user_id = service.get_current_user("token-abc")
+
+# Wylogowanie wszystkich sesji użytkownika
+count = service.logout_all_user_sessions("user-alice")
+```
+
+Przykład pokazuje:
+- Jak testować złożoną współpracę z SSO Registry (Spy vs Mock)
+- Kiedy Spy jest elastyczniejszy, kiedy Mock wymusza kontrakt
+- Zarządzanie wieloma tokenami dla jednego użytkownika
+- Testowanie stanów granicznych (pusty token, brak sesji)
+
 ## Zadania
 
 1. Dodaj `register(token)` i test interakcji.
-2. Dodaj `logout_all(tokens)` i sprawdź kolejność tylko wtedy, gdy jest częścią
+2. Dodaj `logout_all_user_sessions(user_id)` i sprawdź kolejność tylko wtedy, gdy jest częścią
    kontraktu.
 3. Zasymuluj błąd rejestru przez `side_effect=ConnectionError`.
 4. Napisz ten sam test raz ze Spy, raz z Mockiem i porównaj czytelność.
@@ -73,13 +101,14 @@ sprawdzania kolejności prywatnych wywołań, jeśli nie jest to kontrakt.
 
 - `Mock(spec=...)` powinien otrzymać klasę/interfejs zależności,
 - `assert_not_called()` jest właściwe dla pustego tokenu,
-- nie asercjuj `_registry`, jeśli wystarczy publiczne `calls` Spy.
+- nie asercjuj prywatnych pól, jeśli wystarczy publiczne `calls` Spy.
 
 ## Uruchomienie i debugowanie
 
 ```bash
 python -m pytest src/03-test_double/04-sso-registry -v
 python src/03-test_double/04-sso-registry/examples/sso_registry.py
+python src/03-test_double/04-sso-registry/examples/realistic_sso.py
 ```
 
 Breakpoint ustaw w `SessionService.logout()` i obserwuj `call_args` Mocka oraz
