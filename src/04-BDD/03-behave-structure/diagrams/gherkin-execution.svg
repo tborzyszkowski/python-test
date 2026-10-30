@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 390" role="img" aria-labelledby="title desc">
+  <title id="title">Jak Behave wykonuje scenariusz Gherkin</title>
+  <desc id="desc">Feature i Given When Then są parsowane przez Behave, mapowane do funkcji kroków, które wywołują kod domenowy. Asercje w Then sprawdzają obserwowalny rezultat.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fbff"/>
+      <stop offset="1" stop-color="#eef4fb"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#59738d"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#17324d" flood-opacity=".12"/>
+    </filter>
+  </defs>
+  <rect width="1000" height="390" rx="26" fill="url(#bg)"/>
+  <text x="500" y="53" fill="#17324d" font-family="Segoe UI, Arial, sans-serif" font-size="27" font-weight="700" text-anchor="middle">Od przykładu do sprawdzonego zachowania</text>
+
+  <g filter="url(#shadow)" font-family="Segoe UI, Arial, sans-serif" text-anchor="middle">
+    <rect x="34" y="119" width="172" height="112" rx="16" fill="#fff1d6" stroke="#e6a739" stroke-width="2"/>
+    <text x="120" y="158" fill="#81520b" font-size="19" font-weight="700">FEATURE</text>
+    <text x="120" y="188" fill="#4c4a43" font-size="14">plik .feature</text>
+    <text x="120" y="210" fill="#4c4a43" font-size="14">scenariusz</text>
+
+    <rect x="230" y="119" width="172" height="112" rx="16" fill="#e2efff" stroke="#5b91cc" stroke-width="2"/>
+    <text x="316" y="158" fill="#285985" font-size="19" font-weight="700">BEHAVE</text>
+    <text x="316" y="188" fill="#3c4b5a" font-size="14">dopasowuje</text>
+    <text x="316" y="210" fill="#3c4b5a" font-size="14">kroki</text>
+
+    <rect x="426" y="119" width="172" height="112" rx="16" fill="#ede7ff" stroke="#9273cb" stroke-width="2"/>
+    <text x="512" y="158" fill="#5b418e" font-size="19" font-weight="700">STEPS</text>
+    <text x="512" y="188" fill="#494255" font-size="14">Given / When / Then</text>
+    <text x="512" y="210" fill="#494255" font-size="14">funkcje Python</text>
+
+    <rect x="622" y="119" width="172" height="112" rx="16" fill="#dcf5e8" stroke="#47a775" stroke-width="2"/>
+    <text x="708" y="158" fill="#236743" font-size="19" font-weight="700">DOMENA</text>
+    <text x="708" y="188" fill="#354941" font-size="14">reguła biznesowa</text>
+    <text x="708" y="210" fill="#354941" font-size="14">kod niezależny</text>
+
+    <rect x="818" y="119" width="148" height="112" rx="16" fill="#fee2e2" stroke="#e35d5b" stroke-width="2"/>
+    <text x="892" y="158" fill="#9f2f32" font-size="19" font-weight="700">THEN</text>
+    <text x="892" y="188" fill="#493b42" font-size="14">wynik</text>
+    <text x="892" y="210" fill="#493b42" font-size="14">Pass / Fail</text>
+  </g>
+
+  <g fill="none" stroke="#59738d" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M211 175 H222"/>
+    <path d="M407 175 H418"/>
+    <path d="M603 175 H614"/>
+    <path d="M799 175 H810"/>
+  </g>
+  <text x="500" y="294" fill="#52677b" font-family="Segoe UI, Arial, sans-serif" font-size="15" text-anchor="middle">Step definitions tłumaczą słowa domeny na wywołania modelu,</text>
+  <text x="500" y="320" fill="#52677b" font-family="Segoe UI, Arial, sans-serif" font-size="15" text-anchor="middle">ale nie powinny przejmować logiki biznesowej ani ukrywać nieoczekiwanych błędów.</text>
+</svg>

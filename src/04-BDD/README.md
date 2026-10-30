@@ -30,6 +30,8 @@ Po module student powinien:
 
 ## Hierarchia wymagań
 
+![Współpraca Outside-In: od wartości i przykładów biznesowych do scenariusza, implementacji i informacji zwrotnej.](01-bdd-outside-in/diagrams/outside-in.svg)
+
 ```mermaid
 flowchart TB
     V["Vision<br/>Bezpieczna i wartosciowa podroz"] --> G["Goals<br/>Reguly dostepu i nagrody"]
@@ -68,9 +70,9 @@ sequenceDiagram
 .venv\Scripts\python.exe -m pytest src\04-BDD -c src\04-BDD\pytest.ini -v
 
 # Behave dla przykładu domenowego:
-cd src\04-BDD\04-passenger-flights
-python -m behave -f pretty
-cd ..\..
+Push-Location src\04-BDD\04-passenger-flights
+..\..\..\.venv\Scripts\python.exe -m behave -f pretty
+Pop-Location
 
 # Ruff:
 .venv\Scripts\python.exe -m ruff check src\04-BDD
@@ -93,6 +95,7 @@ cd ..\..
 - dopisz co najmniej jeden scenariusz Gherkin przed implementacją,
 - wyjaśnij, jaka wartość biznesowa jest chroniona przez scenariusz,
 - uruchom zarówno `behave`, jak i testy jednostkowe domeny.
+- sprawdź filtrowanie tagiem: `@premium` uruchamia wyłącznie scenariusze lotu premium.
 
 ## Literatura
 

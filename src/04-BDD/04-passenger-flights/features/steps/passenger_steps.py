@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from behave import given, then, when
-from flight_domain import EconomyFlight, Passenger, PremiumFlight
+from flight_domain import EconomyFlight, FlightError, Passenger, PremiumFlight
 
 
 def _passenger(context, name: str) -> Passenger:
@@ -44,7 +44,7 @@ def passenger_on_flight(context, name: str) -> None:
 def add_passenger(context, name: str) -> None:
     try:
         context.flight.add_passenger(_passenger(context, name))
-    except Exception as error:  # przechwytujemy, aby Then opisał rezultat biznesowy
+    except FlightError as error:
         context.error = error
 
 
@@ -57,7 +57,7 @@ def add_duplicate_passenger(context, name: str) -> None:
 def remove_passenger(context, name: str) -> None:
     try:
         context.flight.remove_passenger(name)
-    except Exception as error:
+    except FlightError as error:
         context.error = error
 
 
@@ -87,11 +87,12 @@ def points_passenger(context, name: str, status: str) -> None:
 @given('przebieg lotu wynosi {mileage:d} kilometrów')
 def mileage(context, mileage: int) -> None:
     context.mileage = mileage
+    context.flight = EconomyFlight("POINTS", mileage=mileage)
 
 
 @when('naliczam punkty dla pasażera "{name}"')
 def calculate_points(context, name: str) -> None:
-    context.points = context.mileage // (10 if _passenger(context, name).vip else 20)
+    context.points = context.flight.bonus_points(_passenger(context, name))
 
 
 @then('pasażer otrzymuje {points:d} punktów')

@@ -27,11 +27,23 @@ funkcji Python.
 ```mermaid
 flowchart LR
     F["features/*.feature<br/>Gherkin"] --> B["behave runner"]
-python -m behave -f pretty
-python -m behave --dry-run
-python -m behave --tags=@premium
-cd ..\..
+    B --> S["features/steps/*.py<br/>step definitions"]
+    S --> D["src/*.py<br/>domena"]
     D --> A["wynik scenariusza"]
+```
+
+Przepływ w skrócie: plik `.feature` opisuje przykład, Behave dopasowuje każdy
+krok do dekorowanej funkcji Python, a step definition wywołuje model domeny.
+Wynik Then powinien sprawdzać obserwowalne zachowanie, nie prywatne pola.
+
+![Przepływ wykonania Gherkina przez Behave, step definitions i model domeny.](diagrams/gherkin-execution.svg)
+
+```powershell
+Push-Location src\04-BDD\04-passenger-flights
+..\..\..\.venv\Scripts\python.exe -m behave -f pretty
+..\..\..\.venv\Scripts\python.exe -m behave --dry-run
+..\..\..\.venv\Scripts\python.exe -m behave --tags=@premium
+Pop-Location
 ```
 
 ### Dopasowanie kroków
@@ -73,12 +85,12 @@ def before_scenario(context, scenario):
 
 ## Uruchomienie i debugowanie
 
-```bash
-cd src/04-BDD/04-passenger-flights
-behave -f pretty
-behave --dry-run
-behave --tags=@premium
-cd ..\..
+```powershell
+Push-Location src\04-BDD\04-passenger-flights
+..\..\..\.venv\Scripts\python.exe -m behave -f pretty
+..\..\..\.venv\Scripts\python.exe -m behave --dry-run
+..\..\..\.venv\Scripts\python.exe -m behave --tags=@premium
+Pop-Location
 ```
 
 Breakpointy ustawiaj w `features/steps/passenger_steps.py` oraz

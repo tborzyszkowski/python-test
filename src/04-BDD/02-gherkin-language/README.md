@@ -9,6 +9,8 @@ biznesu i zespołu technicznego.
 
 ## Składnia
 
+![Ścieżka wykonywania scenariusza: Feature i kroki Gherkina są mapowane przez Behave na step definitions, model domenowy i sprawdzany rezultat.](../03-behave-structure/diagrams/gherkin-execution.svg)
+
 ```gherkin
 Feature: Lot premium
   Aby chronić ofertę premium
@@ -93,7 +95,7 @@ Then pasażer jest na liście pasażerów lotu
 ## Uruchomienie
 
 ```bash
-python -m behave src/04-BDD/04-passenger-flights/features --dry-run
+.venv\Scripts\python.exe -m behave src\04-BDD\04-passenger-flights\features --dry-run
 ```
 
 ## Pytania kontrolne

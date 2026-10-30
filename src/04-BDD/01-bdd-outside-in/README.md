@@ -9,6 +9,8 @@ a nie jako alternatywną nazwę dla testów jednostkowych.
 
 ## Od techniki do wartości
 
+![Outside-In: uczestnicy rozmowy przekładają wartość biznesową na przykłady i wdrażane zachowanie.](diagrams/outside-in.svg)
+
 Hierarchia wymagań:
 
 ```mermaid

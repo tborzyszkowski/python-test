@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 440" role="img" aria-labelledby="title desc">
+  <title id="title">Współpraca BDD w podejściu Outside-In</title>
+  <desc id="desc">Customer, analityk, developer i tester wspólnie uzgadniają wartość oraz przykłady. Zespół zapisuje scenariusz Gherkin, implementuje zachowanie od interfejsu do domeny, a następnie potwierdza je testem.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fbff"/>
+      <stop offset="1" stop-color="#eef4fb"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#59738d"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#17324d" flood-opacity=".12"/>
+    </filter>
+  </defs>
+  <rect width="1040" height="440" rx="26" fill="url(#bg)"/>
+  <text x="520" y="52" fill="#17324d" font-family="Segoe UI, Arial, sans-serif" font-size="27" font-weight="700" text-anchor="middle">BDD · wspólne rozumienie, sprawdzalne przykłady</text>
+
+  <g filter="url(#shadow)" font-family="Segoe UI, Arial, sans-serif" text-anchor="middle">
+    <rect x="38" y="111" width="210" height="112" rx="18" fill="#fff1d6" stroke="#e6a739" stroke-width="2"/>
+    <text x="143" y="151" fill="#81520b" font-size="19" font-weight="700">ROZMOWA</text>
+    <text x="143" y="180" fill="#4c4a43" font-size="15">Customer · BA</text>
+    <text x="143" y="202" fill="#4c4a43" font-size="15">Developer · Tester</text>
+
+    <rect x="286" y="111" width="210" height="112" rx="18" fill="#e2efff" stroke="#5b91cc" stroke-width="2"/>
+    <text x="391" y="151" fill="#285985" font-size="19" font-weight="700">PRZYKŁAD</text>
+    <text x="391" y="181" fill="#3c4b5a" font-size="15">reguła + konkretne dane</text>
+    <text x="391" y="203" fill="#3c4b5a" font-size="15">kryterium akceptacji</text>
+
+    <rect x="534" y="111" width="210" height="112" rx="18" fill="#ede7ff" stroke="#9273cb" stroke-width="2"/>
+    <text x="639" y="151" fill="#5b418e" font-size="19" font-weight="700">GHERKIN</text>
+    <text x="639" y="181" fill="#494255" font-size="15">Given · When · Then</text>
+    <text x="639" y="203" fill="#494255" font-size="15">język domeny</text>
+
+    <rect x="782" y="111" width="220" height="112" rx="18" fill="#dcf5e8" stroke="#47a775" stroke-width="2"/>
+    <text x="892" y="151" fill="#236743" font-size="19" font-weight="700">ZACHOWANIE</text>
+    <text x="892" y="181" fill="#354941" font-size="15">step definitions</text>
+    <text x="892" y="203" fill="#354941" font-size="15">→ model domeny</text>
+  </g>
+
+  <g fill="none" stroke="#59738d" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M253 167 H276"/>
+    <path d="M501 167 H524"/>
+    <path d="M749 167 H772"/>
+  </g>
+
+  <rect x="174" y="282" width="692" height="86" rx="18" fill="#ffffff" stroke="#c8d6e5" stroke-width="2"/>
+  <text x="520" y="316" fill="#17324d" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle">Pętla informacji zwrotnej</text>
+  <text x="520" y="345" fill="#52677b" font-family="Segoe UI, Arial, sans-serif" font-size="15" text-anchor="middle">scenariusz nie przechodzi → implementacja → scenariusz potwierdza wartość</text>
+  <path d="M892 231 C892 330 870 326 866 326" fill="none" stroke="#59738d" stroke-width="2.5" marker-end="url(#arrow)"/>
+</svg>

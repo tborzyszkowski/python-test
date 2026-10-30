@@ -18,8 +18,8 @@ Python.
 - **Premium Flight**
   - tylko VIP może zostać dodany.
 - **Bonus Points**
-  - VIP: `mileage / 10`,
-  - standard: `mileage / 20`.
+  - VIP: `mileage // 10`,
+  - standard: `mileage // 20` (wynik jest zaokrąglany w dół do całkowitej liczby punktów).
 
 ```mermaid
 classDiagram
@@ -89,18 +89,19 @@ która ma znaczenie dla biznesu. Dopiero step definition wybiera implementację.
 
 ```bash
 # Z katalogu głównego
-python -m pytest src/04-BDD/04-passenger-flights -v
+.venv\Scripts\python.exe -m pytest src\04-BDD\04-passenger-flights -v
 
 # Behave
 cd src/04-BDD/04-passenger-flights
-python -m behave -f pretty
-python -m behave --format=progress
-python -m behave features/bonus_points.feature
+.venv\Scripts\python.exe -m behave -f pretty
+.venv\Scripts\python.exe -m behave --format=progress
+.venv\Scripts\python.exe -m behave features\bonus_points.feature
 cd ../../..
 ```
 
 W VS Code ustaw breakpoint w `features/steps/passenger_steps.py` albo
-`src/flight_domain.py`. Dla nieudanego scenariusza użyj `python -m behave -f pretty`
+`src/flight_domain.py`. Dla nieudanego scenariusza użyj
+`.venv\Scripts\python.exe -m behave -f pretty`
 i sprawdź ostatni krok wykonany przez context.
 
 ## Pytania kontrolne

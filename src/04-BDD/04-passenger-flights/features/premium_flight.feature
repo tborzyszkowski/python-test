@@ -1,3 +1,4 @@
+@premium
 Feature: Lot premium
   Aby chronić ofertę premium
   Jako operator lotu
