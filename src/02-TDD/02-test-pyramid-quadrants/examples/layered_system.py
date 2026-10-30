@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Protocol
 
 
 @dataclass(frozen=True)
@@ -10,6 +11,14 @@ class Product:
     sku: str
     name: str
     price_cents: int
+
+
+class Catalog(Protocol):
+    """Publiczny kontrakt używany przez usługę katalogu."""
+
+    def find(self, sku: str) -> Product:
+        """Zwróć produkt dla SKU albo zgłoś KeyError."""
+        ...
 
 
 class MemoryCatalog:
@@ -28,21 +37,24 @@ class MemoryCatalog:
 class CatalogService:
     """Logika biznesowa, ktora korzysta z katalogu przez publiczny kontrakt."""
 
-    def __init__(self, catalog: MemoryCatalog) -> None:
+    def __init__(self, catalog: Catalog) -> None:
         self.catalog = catalog
 
     def price_for(self, sku: str, quantity: int = 1) -> int:
         if quantity <= 0:
             raise ValueError("quantity must be positive")
-        return self.catalog.find(sku).price_cents * quantity
+        product = self.catalog.find(sku)
+        return product.price_cents * quantity
 
     def buy(self, sku: str, quantity: int = 1) -> dict[str, object]:
+        if quantity <= 0:
+            raise ValueError("quantity must be positive")
         product = self.catalog.find(sku)
         return {
             "sku": product.sku,
             "name": product.name,
             "quantity": quantity,
-            "total_cents": self.price_for(sku, quantity),
+            "total_cents": product.price_cents * quantity,
         }
 
 

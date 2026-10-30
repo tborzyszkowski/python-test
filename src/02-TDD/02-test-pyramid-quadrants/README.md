@@ -11,25 +11,35 @@ technologiczną albo biznesową.
 
 ## Piramida testów
 
+![Piramida testów: dużo szybkich testów jednostkowych u podstawy, mniej integracyjnych pośrodku i niewiele testów E2E na szczycie. Testy manualne uzupełniają piramidę.](diagrams/test-pyramid.svg)
+
 ```mermaid
 flowchart TB
-    M["Manualne eksploracyjne<br/>najwolniejsze, elastyczne"]
-    A["Akceptacyjne / E2E<br/>czy system spełnia scenariusz biznesowy?"]
-    I["Integracyjne<br/>czy komponenty współpracują?"]
-    U["Jednostkowe<br/>szybkie, izolowane, liczne"]
-    M --> A --> I --> U
+    A["Akceptacyjne / E2E<br/>nieliczne, wolniejsze"]
+    I["Integracyjne<br/>umiarkowany koszt"]
+    U["Jednostkowe<br/>liczne, szybkie, izolowane"]
+    A --> I --> U
+    X["Manualne / eksploracyjne"]
+    X -. "uzupełniają; nie są poziomem piramidy" .- A
 
     classDef expensive fill:#ffebee,stroke:#c62828
     classDef medium fill:#fff3e0,stroke:#ef6c00
     classDef cheap fill:#e8f5e9,stroke:#2e7d32
-    class M,A expensive
+    classDef complementary fill:#e3f2fd,stroke:#1565c0
+    class A expensive
     class I medium
     class U cheap
 ```
 
-Piramida nie oznacza „nigdy nie pisz E2E”. Oznacza, że większość reguł
-powinna być sprawdzana tanio i lokalnie, a testy wyższych poziomów powinny
-potwierdzać integrację i najważniejsze ścieżki użytkownika.
+Piramida nie oznacza „nigdy nie pisz E2E”. Jej podstawa to wiele szybkich
+testów jednostkowych, wyżej znajduje się mniejsza liczba testów integracyjnych,
+a na szczycie niewiele wolniejszych testów akceptacyjnych/E2E. Proporcje są
+wskazówką, nie uniwersalnym limitem ani wymaganą liczbą testów. Testy manualne
+i eksploracyjne uzupełniają automatyzację, ale nie są jej kolejnym poziomem.
+
+Poziom opisuje **zakres uruchamianego systemu**, a nie nazwę testowanej klasy:
+test `CatalogService` z `StubCatalog` izoluje regułę jednostkową, natomiast
+`CatalogService` z `MemoryCatalog` sprawdza współpracę dwóch komponentów.
 
 ### Antywzorce
 
@@ -70,8 +80,11 @@ produkt?” oraz „Czy patrzymy przez pryzmat technologii, czy wartości biznes
 | Czy klient może kupić produkt od początku do końca? | test akceptacyjny/E2E |
 | Czy interfejs jest wygodny dla użytkownika? | test manualny/eksploracyjny |
 
-Kod w [examples/layered_system.py](examples/layered_system.py) pokazuje tę
-samą regułę rozbitą na jednostkę, integrację i scenariusz akceptacyjny.
+Kod i testy w [examples/layered_system.py](examples/layered_system.py) oraz
+[examples/test_layered_system.py](examples/test_layered_system.py) pokazują
+regułę jednostkową z kontrolowanym Stubem i integrację usługi z katalogiem
+w pamięci. Scenariusz akceptacyjny projektujesz w zadaniu 3; przykład celowo
+nie nazywa testu w procesie tym samym co test E2E całej aplikacji.
 
 ## Zadania
 

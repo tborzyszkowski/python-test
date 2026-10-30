@@ -16,6 +16,8 @@ decyzji projektowych na podstawie małych, wykonywalnych przykładów zachowania
 
 ## Teoria
 
+![Cykl Red-Green-Refactor: test, minimalna implementacja i refaktoryzacja bez zmiany zachowania.](diagrams/red-green-refactor.svg)
+
 ### Pętla informacji zwrotnej
 
 ```mermaid

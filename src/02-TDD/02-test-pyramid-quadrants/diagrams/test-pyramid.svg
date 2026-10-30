@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 590" role="img" aria-labelledby="title desc">
+  <title id="title">Piramida testów</title>
+  <desc id="desc">Trzy poziomy automatycznych testów: mało testów E2E na szczycie, testy integracyjne pośrodku i wiele szybkich testów jednostkowych u podstawy. Testy eksploracyjne uzupełniają piramidę poza jej poziomami.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fbff"/>
+      <stop offset="1" stop-color="#eef4fb"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#17324d" flood-opacity=".12"/>
+    </filter>
+  </defs>
+  <rect width="960" height="590" rx="26" fill="url(#background)"/>
+  <text x="54" y="58" fill="#17324d" font-family="Segoe UI, Arial, sans-serif" font-size="29" font-weight="700">Piramida testów</text>
+  <text x="54" y="88" fill="#52677b" font-family="Segoe UI, Arial, sans-serif" font-size="15">Im niższy poziom, tym zwykle więcej testów i szybsza informacja zwrotna.</text>
+
+  <g filter="url(#shadow)" stroke="#fff" stroke-width="4" stroke-linejoin="round">
+    <path d="M355 126 L523 258 L187 258 Z" fill="#f97366"/>
+    <path d="M187 258 L523 258 L632 389 L78 389 Z" fill="#f4b942"/>
+    <path d="M78 389 L632 389 L735 512 L0 512 Z" fill="#4abf8a"/>
+  </g>
+
+  <g fill="#17324d" font-family="Segoe UI, Arial, sans-serif" text-anchor="middle">
+    <text x="355" y="192" font-size="19" font-weight="700">AKCEPTACYJNE / E2E</text>
+    <text x="355" y="220" font-size="14">mało · wolniejsze · szeroki zakres</text>
+    <text x="355" y="313" font-size="19" font-weight="700">INTEGRACYJNE</text>
+    <text x="355" y="341" font-size="14">sprawdzają współpracę komponentów</text>
+    <text x="367" y="438" font-size="20" font-weight="700">JEDNOSTKOWE</text>
+    <text x="367" y="467" font-size="15">wiele · szybkie · izolowane</text>
+  </g>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <path d="M785 168 V456" fill="none" stroke="#52677b" stroke-width="2.5"/>
+    <path d="M777 178 L785 162 L793 178 M777 446 L785 462 L793 446" fill="none" stroke="#52677b" stroke-width="2.5"/>
+    <text x="814" y="218" fill="#17324d" font-size="16" font-weight="700">Koszt i czas</text>
+    <text x="814" y="243" fill="#a33b35" font-size="15">rosną ku górze</text>
+    <text x="814" y="380" fill="#17324d" font-size="16" font-weight="700">Szybkość</text>
+    <text x="814" y="405" fill="#287653" font-size="15">rośnie ku dołowi</text>
+  </g>
+
+  <rect x="54" y="530" width="852" height="38" rx="12" fill="#dceaf7"/>
+  <text x="480" y="555" fill="#294965" font-family="Segoe UI, Arial, sans-serif" font-size="14" text-anchor="middle">Testy manualne i eksploracyjne uzupełniają automatyzację — nie są osobnym poziomem piramidy.</text>
+</svg>

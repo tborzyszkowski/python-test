@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 350" role="img" aria-labelledby="title desc">
+  <title id="title">Cykl Red-Green-Refactor</title>
+  <desc id="desc">Cykliczny proces TDD: najpierw test, który nie przechodzi, następnie minimalna implementacja, która przechodzi, a na końcu refaktoryzacja bez zmiany zachowania.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#52677b"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#17324d" flood-opacity=".12"/>
+    </filter>
+  </defs>
+  <rect width="960" height="350" rx="26" fill="#f5f8fc"/>
+  <text x="480" y="54" fill="#17324d" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" text-anchor="middle">Krótka pętla TDD</text>
+
+  <g filter="url(#shadow)" font-family="Segoe UI, Arial, sans-serif" text-anchor="middle">
+    <rect x="65" y="115" width="235" height="132" rx="18" fill="#fee2e2" stroke="#e35d5b" stroke-width="2"/>
+    <text x="182" y="161" fill="#9f2f32" font-size="25" font-weight="700">RED</text>
+    <text x="182" y="193" fill="#493b42" font-size="16">Dodaj jeden test</text>
+    <text x="182" y="218" fill="#493b42" font-size="16">i zobacz właściwą porażkę</text>
+
+    <rect x="362" y="115" width="235" height="132" rx="18" fill="#dcfce7" stroke="#36a36b" stroke-width="2"/>
+    <text x="479" y="161" fill="#216b48" font-size="25" font-weight="700">GREEN</text>
+    <text x="479" y="193" fill="#354941" font-size="16">Napisz najmniejszy kod</text>
+    <text x="479" y="218" fill="#354941" font-size="16">spełniający test</text>
+
+    <rect x="659" y="115" width="235" height="132" rx="18" fill="#dbeafe" stroke="#4b83c2" stroke-width="2"/>
+    <text x="776" y="161" fill="#24578a" font-size="25" font-weight="700">REFACTOR</text>
+    <text x="776" y="193" fill="#354556" font-size="16">Uprość kod i testy</text>
+    <text x="776" y="218" fill="#354556" font-size="16">bez zmiany zachowania</text>
+  </g>
+
+  <g fill="none" stroke="#52677b" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M305 181 H350"/>
+    <path d="M602 181 H647"/>
+    <path d="M777 259 C777 316 182 316 182 259"/>
+  </g>
+  <text x="480" y="330" fill="#52677b" font-family="Segoe UI, Arial, sans-serif" font-size="14" text-anchor="middle">Uruchom testy ponownie po każdej zmianie.</text>
+</svg>

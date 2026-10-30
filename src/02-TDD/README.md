@@ -39,6 +39,11 @@ Po przerobieniu modułu student powinien:
 
 ## Mapa modułu
 
+Piramida testów jest wizualnym punktem odniesienia dla doboru zakresu i kosztu
+testów; jej proporcje są orientacyjne.
+
+![Piramida testów: szeroka podstawa testów jednostkowych, węższy poziom integracyjny i niewielki szczyt testów E2E.](02-test-pyramid-quadrants/diagrams/test-pyramid.svg)
+
 ```mermaid
 flowchart LR
     F["Filozofia TDD<br/>Red - Green - Refactor"] --> P["Poziom testu<br/>piramida + kwadranty"]

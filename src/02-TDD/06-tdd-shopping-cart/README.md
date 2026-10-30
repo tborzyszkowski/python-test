@@ -15,7 +15,7 @@ klasy.
 2. dodanie produktu zwiększa sumę,
 3. wiele sztuk tego samego produktu zwiększa ilość,
 4. próg kwotowy uruchamia rabat procentowy,
-5. promocja `3_for_2` nalicza najtańszą sztukę za `0`,
+5. promocja `3_for_2` daje co trzecią sztukę za `0` w ramach tego samego SKU,
 6. usunięcie produktu aktualizuje sumę,
 7. ujemna cena i ilość niedodatnia są odrzucane.
 
@@ -38,7 +38,8 @@ flowchart TB
 - pieniądze przechowujemy jako `int` w groszach,
 - rabat jest osobną wartością domenową, nie formatowaniem tekstu,
 - `CartLine` opisuje produkt i ilość,
-- promocja `3_for_2` działa tylko dla wskazanej kategorii,
+- promocja `3_for_2` działa tylko dla wskazanej kategorii i liczy pełne grupy
+  po trzy w obrębie pojedynczego SKU (nie wybiera najtańszego produktu z całego koszyka),
 - testy sprawdzają `total_cents`, a nie prywatny słownik koszyka.
 
 ## Kod i testy
