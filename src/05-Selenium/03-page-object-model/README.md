@@ -7,6 +7,8 @@
 Oddzielić reprezentację strony i lokalizatory od logiki testu. Page Object
 udostępnia metody opisujące czynności użytkownika, a test opisuje zachowanie.
 
+![Test wywołuje publiczne metody Page Object, który ukrywa lokalizatory i korzysta z WebDrivera.](diagrams/01-pom.png)
+
 ```mermaid
 classDiagram
     class LoginPage {
@@ -41,12 +43,25 @@ class LoginPage:
         self.driver.find_element(*self.USERNAME).send_keys(username)
 ```
 
+Przykłady działają na lokalnych stronach z [web/](../web/). `CatalogPage`
+wyszukuje produkt po atrybucie `data-sku`, klika jego przycisk i czeka na
+obserwowalną zmianę licznika koszyka:
+
+```python
+page = CatalogPage(browser, local_site).open()
+page.add_product("book-2")
+assert page.wait_for_cart_count(1) == 1
+```
+
+Implementacja znajduje się w [selenium_pages.py](examples/selenium_pages.py),
+a testy w [test_pom.py](examples/test_pom.py).
+
 ## Zadania
 
 1. Dodaj `CatalogPage` z metodą `add_product(sku)`.
 2. Przenieś lokalizatory loginu z testu do Page Object.
 3. Dodaj metodę `is_logged_in()` i test poprawnego komunikatu.
-4. Zaprojektuj Page Object tak, aby zmiana id przycisku wymagała edycji jednego pliku.
+4. Zaprojektuj Page Object tak, aby zmiana lokalizatora przycisku wymagała edycji jednego pliku.
 5. Wskaż, których asercji nie należy przenosić do Page Object.
 
 **Podpowiedzi:**
@@ -61,7 +76,7 @@ class LoginPage:
 .venv\Scripts\python.exe -m pytest src\05-Selenium\03-page-object-model -v
 ```
 
-Breakpointy ustaw w `pages.py` oraz na linii testu wywołującej akcję.
+Breakpointy ustaw w `examples/selenium_pages.py` oraz na linii testu wywołującej akcję.
 
 ## Literatura
 

@@ -9,6 +9,8 @@ artefaktami po niepowodzeniu.
 
 ## Fixture
 
+![Cykl życia fixture: uruchomienie drivera, wykonanie testu, screenshot po błędzie i zawsze wykonywane quit.](diagrams/01-fixture-lifecycle.png)
+
 Wspólna fixture `browser`:
 
 1. wybiera Chrome lub Firefox przez `SELENIUM_BROWSER`,
@@ -31,6 +33,7 @@ flowchart TD
 ## Raport pytest-html
 
 ```powershell
+New-Item -ItemType Directory -Force src\05-Selenium\artifacts | Out-Null
 .venv\Scripts\python.exe -m pytest src\05-Selenium `
   --html=src\05-Selenium\artifacts\report.html --self-contained-html
 ```

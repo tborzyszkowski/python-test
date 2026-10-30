@@ -19,6 +19,8 @@ ukrywać problemy i utrudniać diagnozę, dlatego w materiałach fixture ustawia
 
 ## Explicit Wait
 
+![WebDriverWait odpytuje warunek w przeglądarce do chwili spełnienia warunku albo timeoutu.](diagrams/01-explicit-wait.png)
+
 ```python
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -77,6 +79,8 @@ WebDriverWait(driver, 5).until(
 3. Dodaj warunek `element_to_be_clickable`.
 4. Zasymuluj timeout i sprawdź, czy komunikat błędu wskazuje lokalizator.
 5. Porównaj czas i stabilność testu z `sleep()` oraz `WebDriverWait`.
+6. W katalogu kliknij Add dla produktu i poczekaj na zmianę licznika koszyka,
+   zamiast oczekiwać stałego czasu.
 
 **Podpowiedzi:**
 

@@ -35,6 +35,8 @@ driver = webdriver.Firefox(options=options)
 
 ## Lokalizatory
 
+![Drzewo wyboru stabilnego lokalizatora: zacznij od ID, potem użyj semantycznego name lub data-testid, a CSS/XPath zostaw dla relacji.](diagrams/01-locator-choice.png)
+
 | Lokalizator | Przykład | Kiedy użyć |
 |---|---|---|
 | `By.ID` | `By.ID, "username"` | stabilne, unikalne id |
@@ -65,6 +67,8 @@ flowchart TD
 2. Zamień XPath pozycyjny na lokalizator oparty na atrybucie.
 3. Uruchom ten sam test w Chrome i Firefox przez `SELENIUM_BROWSER`.
 4. Dodaj lokalizator do artykułu produktu z `data-sku`.
+5. Porównaj liczbę elementów znalezionych przez `By.CLASS_NAME` i `By.CSS_SELECTOR`
+   dla katalogu, a następnie wybierz lokalizator oparty na `data-sku`.
 
 **Podpowiedzi:**
 

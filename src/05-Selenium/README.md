@@ -66,7 +66,17 @@ $env:SELENIUM_BROWSER = "firefox"
   --html=src\05-Selenium\artifacts\report.html --self-contained-html
 ```
 
-Fixture zapisuje screenshot po niepowodzeniu do `src/05-Selenium/artifacts/`.
+Utwórz katalog raportów przed uruchomieniem pytest-html:
+
+```powershell
+New-Item -ItemType Directory -Force src\05-Selenium\artifacts | Out-Null
+```
+
+Fixture zapisuje screenshot po niepowodzeniu do `src\05-Selenium\artifacts\`.
+
+## Przepływ testu przeglądarkowego
+
+![Przepływ: pytest tworzy przeglądarkę, test wykonuje akcję, WebDriverWait sprawdza wynik, a fixture sprząta i zapisuje screenshot po błędzie.](04-pytest-integration/diagrams/01-fixture-lifecycle.png)
 
 ## Mapa modułu
 
@@ -81,6 +91,11 @@ flowchart LR
     class W,A,P,X topic
     class E outcome
 ```
+
+Diagramy dotyczące [wyboru lokalizatora](01-webdriver-and-locators/diagrams/01-locator-choice.png),
+[explicit wait](02-waits-and-flaky-tests/diagrams/01-explicit-wait.png) i
+[Page Object Model](03-page-object-model/diagrams/01-pom.png) są osadzone w README
+odpowiednich tematów.
 
 ## Materiał inspiracyjny
 
