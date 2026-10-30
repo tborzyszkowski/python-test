@@ -24,6 +24,8 @@ flowchart LR
     R --> G
 ```
 
+![Laboratorium: zielona reguła, kontrolowane złamanie granicy, diagnoza i naprawa zależności.](diagrams/01-architecture-lab.png)
+
 ## Zadania
 
 1. Wprowadź cykl `domain -> infrastructure -> domain` w kopii przykładu.

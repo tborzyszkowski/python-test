@@ -13,6 +13,7 @@ Po module student powinien:
 - skonfigurować kontrakt `import-linter`,
 - wykrywać cykle importów,
 - automatycznie sprawdzać nazwy i położenie klas serwisowych,
+- weryfikować fitness functions zarówno dla zdrowej architektury, jak i znanego naruszenia,
 - rozumieć, że test architektury chroni granice, a nie implementację pojedynczej funkcji.
 
 ## Tematy
@@ -25,6 +26,9 @@ Po module student powinien:
    warstwowość, cykle i konwencje klas serwisowych.
 4. [04-architecture-lab](04-architecture-lab/README.md) - laboratorium:
    celowe zepsucie reguły i naprawa na podstawie komunikatu testu.
+5. [05-architecture-fitness-functions](05-architecture-fitness-functions/README.md) -
+   automatyczne fitness functions, testy na architekturze poprawnej i celowo
+   błędnej oraz uruchamianie kontroli w CI.
 
 ## Mapa modułu
 
@@ -45,6 +49,8 @@ flowchart LR
     class D,C,CI result
 ```
 
+![Cykl fitness function: reguła przechodzi dla poprawnej architektury i wykrywa celowo przygotowane naruszenie.](05-architecture-fitness-functions/diagrams/fitness-function.svg)
+
 ## Uruchamianie
 
 ```powershell
@@ -63,6 +69,9 @@ cd ..\..
 
 # Ruff
 .venv\Scripts\python.exe -m ruff check src\06-ArchTest
+
+# Test fitness function i znanego błędnego grafu
+.venv\Scripts\python.exe -m pytest src\06-ArchTest\03-architecture-rules\examples\test_import_cycles.py -v
 ```
 
 ## Kryteria oceny

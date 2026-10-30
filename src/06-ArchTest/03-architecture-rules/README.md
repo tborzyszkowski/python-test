@@ -12,6 +12,8 @@ arch_sample/
 └── web/
 ```
 
+![Warstwy aplikacji i kierunek dozwolonych zależności; domena nie importuje adapterów.](diagrams/01-layered-architecture.png)
+
 ## Izolacja domenowa
 
 Domena może używać standardowej biblioteki i własnych obiektów domenowych, ale
@@ -35,13 +37,16 @@ flowchart TB
 
 ## Wykrywanie cykli
 
+![Dwa moduły tworzą cykl importów, który powinien zostać wykryty przez test architektury.](diagrams/02-cycle-detection.png)
+
 Jeśli `domain` importuje `services`, `services` importuje `infrastructure`,
 a `infrastructure` importuje `domain`, zmiana jednego modułu może łamać cały
 graf. Import Linter oferuje kontrakty `independence` i `acyclic siblings`.
 
 ## Konwencje strukturalne
 
-Reguła może sprawdzić, że:
+Reguła testowa skanuje wszystkie moduły w `services/`, nie tylko znaną z góry
+klasę. Może sprawdzić, że:
 
 - klasy `*Service` leżą w `services/`,
 - dziedziczą po `BaseService`,
@@ -67,6 +72,8 @@ flowchart LR
 3. Utwórz dwa moduły z cyklem w katalogu ćwiczeń i napisz test wykrywający cykl.
 4. Dodaj test sprawdzający nazwę i bazę `PaymentService`.
 5. Zdefiniuj warstwowość dla własnej aplikacji.
+6. Dodaj nową klasę serwisową i sprawdź, czy test konwencji wykrywa ją bez
+   dopisywania nazwy klasy do testu.
 
 **Podpowiedzi:**
 

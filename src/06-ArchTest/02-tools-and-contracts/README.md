@@ -61,6 +61,23 @@ flowchart TD
     I --> CI
 ```
 
+### Reguła deklaratywna czy własny analizator AST?
+
+Najpierw wybierz gotowy kontrakt, jeśli opisuje wymaganą granicę. Własny
+analizator, taki jak przykład z wykrywaniem cykli importów, ma sens wtedy, gdy
+sprawdzasz właściwość grafu lub celowo błędne pliki, których nie należy
+importować ani dodawać do pakietu produkcyjnego.
+
+| Sytuacja | Wybór |
+|---|---|
+| Zakazane importy między pakietami | `pytest-archon` lub kontrakt `forbidden` |
+| Kierunek i kolejność warstw | kontrakt `layers` |
+| Cykle wewnątrz grafu importów | kontrakt `acyclic siblings` albo analizator AST |
+| Konwencje klas i ich lokalizacja | test strukturalny z `inspect` |
+
+Własne reguły wymagają testów detektora: poprawny graf powinien być zaakceptowany,
+a przygotowany graf naruszający regułę powinien zostać rozpoznany jako błędny.
+
 ## Zadania
 
 1. Napisz `archrule` blokujący import web do domeny.
