@@ -25,6 +25,8 @@ Po module student powinien:
 3. [03-racing-car-and-html](03-racing-car-and-html/README.md) - czujnik
    ciśnienia i `io.StringIO` jako praktyczne izolowanie I/O.
 4. [04-sso-registry](04-sso-registry/README.md) - Spy i Mock w rejestrze SSO.
+5. [05-bigger-sample](05-bigger-sample/README.md) - większy scenariusz
+   `SubscriptionService` łączący wszystkie test doubles i monkeypatching.
 
 ## Mapa modułu
 
