@@ -40,6 +40,18 @@ class TestDummy:
 
         assert service.quote(SubscriptionPlan("Basic", Decimal("50.00"))) == Decimal("61.50")
 
+    def test_dummy_is_still_valid_when_full_activation_is_exercised(self):
+        service = SubscriptionService(
+            InMemorySubscriptionRepository(),
+            PaymentGatewayStub(PaymentResult("success", "tx-dummy")),
+            EmailNotificationSpy(),
+            DummyAuditLogger(),
+        )
+
+        subscription = service.activate("user-1", PLAN, "token")
+
+        assert subscription.plan_name == "Premium"
+
 
 class TestStub:
     """Stub kontroluje odpowiedź zewnętrznego API bez sieci."""
@@ -60,6 +72,13 @@ class TestStub:
 
         with pytest.raises(RuntimeError, match="declined"):
             service.activate("user-1", PLAN, "bad-card")
+
+    def test_success_without_transaction_id_is_not_accepted(self):
+        gateway = PaymentGatewayStub(PaymentResult("success"))
+        service = SubscriptionService(Mock(), gateway, Mock(), DummyAuditLogger())
+
+        with pytest.raises(RuntimeError, match="declined"):
+            service.activate("user-1", PLAN, "token")
 
 
 class TestFake:
@@ -89,6 +108,21 @@ class TestFake:
         assert repository.get_for_user("user-1") == first
         assert repository.get_for_user("user-2") == second
 
+    def test_fake_returns_none_for_unknown_user(self):
+        repository = InMemorySubscriptionRepository()
+
+        assert repository.get_for_user("does-not-exist") is None
+
+    def test_fake_replaces_subscription_for_the_same_user(self):
+        repository = InMemorySubscriptionRepository()
+        old = Subscription("user-1", "Basic", "tx-old", datetime(2026, 1, 1), datetime(2027, 1, 1))
+        new = Subscription("user-1", "Premium", "tx-new", datetime(2026, 2, 1), datetime(2027, 2, 1))
+
+        repository.save(old)
+        repository.save(new)
+
+        assert repository.get_for_user("user-1") == new
+
 
 class TestSpy:
     """Spy pozwala sprawdzać wynik i zapisane dane interakcji."""
@@ -116,6 +150,20 @@ class TestSpy:
         notifications.send("user-1", "second", "two")
 
         assert [email[1] for email in notifications.sent_emails] == ["first", "second"]
+
+    def test_declined_payment_does_not_record_confirmation(self):
+        notifications = EmailNotificationSpy()
+        service = SubscriptionService(
+            InMemorySubscriptionRepository(),
+            PaymentGatewayStub(PaymentResult("declined")),
+            notifications,
+            DummyAuditLogger(),
+        )
+
+        with pytest.raises(RuntimeError):
+            service.activate("user-1", PLAN, "token")
+
+        assert notifications.sent_emails == []
 
 
 class TestMock:
@@ -147,6 +195,17 @@ class TestMock:
             "Subskrypcja aktywowana",
             "Dziękujemy za subskrypcję planu Premium.",
         )
+
+    def test_invalid_input_does_not_charge_or_save(self):
+        repository = Mock(spec=DatabaseRepository)
+        gateway = Mock()
+        service = SubscriptionService(repository, gateway, Mock(), DummyAuditLogger())
+
+        with pytest.raises(ValueError, match="required"):
+            service.activate("", PLAN, "token")
+
+        gateway.charge.assert_not_called()
+        repository.save.assert_not_called()
 
 
 class FrozenDateTime(datetime):
@@ -182,3 +241,19 @@ class TestMonkeypatch:
         service = SubscriptionService(Mock(), Mock(), Mock(), DummyAuditLogger())
 
         assert service.quote(PLAN) == Decimal("86.40")
+
+    def test_controlled_time_allows_testing_active_boundary(self, monkeypatch):
+        monkeypatch.setattr(subscription_service, "datetime", FrozenDateTime)
+        repository = InMemorySubscriptionRepository()
+        repository.save(
+            Subscription(
+                "user-1",
+                "Premium",
+                "tx-current",
+                FrozenDateTime(2026, 1, 1),
+                FrozenDateTime(2027, 1, 1),
+            )
+        )
+        service = SubscriptionService(repository, Mock(), Mock(), DummyAuditLogger())
+
+        assert service.is_subscription_active("user-1") is True

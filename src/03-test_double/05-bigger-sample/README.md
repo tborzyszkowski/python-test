@@ -42,16 +42,32 @@ W testach płatność, baza, e-mail i zegar nie wykonują operacji produkcyjnych
 wyłącznie matematykę ceny, więc `DummyAuditLogger` nie zapisuje żadnych danych.
 To nie jest Stub: logger nie dostarcza odpowiedzi potrzebnej do obliczenia ceny.
 
+W testach mamy trzy różne zastosowania:
+
+1. **Obliczenia ceny** - pozostałe zależności są nieistotne, a logger tylko
+   spełnia wymagany argument konstruktora.
+2. **Inny plan cenowy** - ten sam Dummy można ponownie wykorzystać, bo nie ma
+   własnego stanu i nie wpływa na wynik.
+3. **Pełna aktywacja** - nawet gdy przechodzimy przez zapis i e-mail, audyt
+   nadal może być poza zakresem testu.
+
 ```python
 service = SubscriptionService(Mock(), Mock(), Mock(), DummyAuditLogger())
 assert service.quote(PLAN) == Decimal("61.50")
 ```
 
+Ważne: Dummy nie powinien mieć asercji. Gdy chcemy sprawdzać treść logu,
+potrzebujemy Spy albo Mock.
+
 ### 2. Stub: kontrolowana odpowiedź
 
 `PaymentGatewayStub` zawsze zwraca przekazany `PaymentResult`. Dzięki temu
-możemy osobno pokazać ścieżkę zaakceptowanej i odrzuconej płatności, bez HTTP,
-karty i pieniędzy.
+możemy osobno pokazać trzy istotne odpowiedzi API, bez HTTP, karty i pieniędzy:
+
+1. `success` z identyfikatorem transakcji - aktywacja kończy się powodzeniem.
+2. `declined` - serwis zgłasza błąd domenowy i nie zapisuje subskrypcji.
+3. `success` bez `transaction_id` - odpowiedź jest niespójna i również nie
+   może doprowadzić do aktywacji.
 
 ```python
 gateway = PaymentGatewayStub(PaymentResult("declined"))
@@ -74,8 +90,15 @@ repository.save(subscription)
 assert repository.get_for_user("user-1") == subscription
 ```
 
-Fake jest większy niż Stub, bo posiada stan i logikę. Nadal nie powinien
-udawać całego SQL ani testować szczegółów konkretnego silnika bazy.
+Fake jest większy niż Stub, bo posiada stan i logikę. W testach pokazujemy:
+
+1. zapis i późniejszy odczyt subskrypcji,
+2. izolację danych dwóch użytkowników,
+3. odczyt nieznanego użytkownika jako `None` oraz zastąpienie starszego
+   rekordu tego samego użytkownika.
+
+Nadal nie powinien udawać całego SQL ani testować szczegółów konkretnego
+silnika bazy.
 
 ### 4. Spy: historia obserwowalnych wywołań
 
@@ -89,7 +112,11 @@ assert "Dziękujemy za subskrypcję" in notifications.sent_emails[0][2]
 ```
 
 Spy jest dobry, gdy chcemy elastycznie analizować kilka wywołań lub ich stan,
-a nie definiować od razu ścisłego oczekiwania.
+a nie definiować od razu ścisłego oczekiwania. Przykłady obejmują:
+
+1. sprawdzenie adresata, tematu i treści potwierdzenia,
+2. sprawdzenie kolejności dwóch wiadomości,
+3. potwierdzenie, że po odrzuconej płatności nie wysłano żadnego maila.
 
 ### 5. Mock: ścisła interakcja
 
@@ -102,6 +129,12 @@ gateway.rollback_transaction.assert_called_once_with("tx-404")
 ```
 
 `spec=DatabaseRepository` dodatkowo ogranicza literówki w nazwach metod.
+W testach Mock sprawdza trzy różne kontrakty:
+
+1. rollback dokładnie raz z właściwym identyfikatorem po błędzie bazy,
+2. dokładne argumenty pojedynczego e-maila po sukcesie,
+3. brak wywołania płatności i zapisu dla niepoprawnego wejścia.
+
 Mock należy stosować do ważnych kontraktów, nie do każdej prywatnej metody.
 
 ### 6. Monkeypatching: czas i konfiguracja
@@ -115,6 +148,12 @@ monkeypatch.setenv("SUBSCRIPTION_DISCOUNT", "0.20")
 ```
 
 Dzięki stałemu zegarowi test wygaśnięcia nie zależy od dnia uruchomienia.
+Przykłady obejmują:
+
+1. subskrypcję wygasłą,
+2. subskrypcję aktywną w kontrolowanym momencie,
+3. dwa warianty rabatu i podatku z `os.environ`.
+
 Zmiana `os.environ` pozwala sprawdzić konfigurację bez edycji pliku `.env`.
 
 ## Jak uruchomić
@@ -141,3 +180,24 @@ Można uruchomić pojedynczą grupę:
 4. Zastąp Mock powiadomień Spyem. Zastanów się, czy test nadal sprawdza
    kontrakt, czy tylko szczegół implementacji.
 5. Zmień `365` dni na regułę kalendarzową i uzupełnij testy graniczne.
+
+## Przykładowe rozwiązania ćwiczeń
+
+Rozwiązania znajdują się w osobnym pliku
+[td_solutions_05.py](exercises/td_solutions_05.py). Są zapisane jako małe,
+uruchamialne funkcje i klasy, aby można było porównać podejście z własnym
+rozwiązaniem bez modyfikowania kodu przykładu.
+
+Plik pokazuje:
+
+- Stub rzucający `TimeoutError` i tłumaczenie go na błąd domenowy,
+- Fake z metodą `delete_for_user`,
+- Spy audytu oraz brak logu po odrzuconej płatności,
+- zastąpienie Mocka powiadomień przez `EmailNotificationSpy`,
+- regułę rocznej daty kalendarzowej wraz z przypadkiem 29 lutego.
+
+Można sprawdzić składnię i przykładowe funkcje poleceniem:
+
+```powershell
+.venv\Scripts\python.exe -c "import sys; sys.path[:0] = [r'src\03-test_double\05-bigger-sample\examples', r'src\03-test_double\05-bigger-sample\exercises']; from td_solutions_05 import calendar_expiry_examples; print(calendar_expiry_examples())"
+```
