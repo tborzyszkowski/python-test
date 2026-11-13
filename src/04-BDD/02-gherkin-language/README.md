@@ -23,6 +23,29 @@ system ma użyć klasy `PremiumFlight`, słownika czy bazy SQL. Mówi, co
 użytkownik lub operator może zaobserwować. Dzięki temu scenariusz pozostaje
 stabilny, nawet gdy implementacja wewnętrzna zostanie zmieniona.
 
+### Kim jest BA?
+
+`BA` to skrót od **Business Analyst**, czyli **analityk biznesowy**. Jest to
+osoba, która pomaga zespołowi zrozumieć problem biznesowy i przełożyć go na
+jednoznaczne wymagania oraz przykłady. BA nie ogranicza się do spisywania
+życzeń; dopytuje o cel, reguły, wyjątki, dane wejściowe i oczekiwane rezultaty.
+
+W praktyce BA:
+
+- porządkuje rozmowę między Customerem, Developerem i Testerem,
+- pomaga odróżnić wartość biznesową od szczegółu implementacyjnego,
+- doprecyzowuje scenariusze `Given/When/Then`,
+- wykrywa sprzeczności i brakujące przypadki przed rozpoczęciem
+  implementacji,
+- pilnuje, aby kryteria akceptacji odpowiadały rzeczywistej potrzebie
+  biznesowej.
+
+W przykładzie lotu premium BA może zadać pytania: „Czy status `VIP` jest
+jedynym warunkiem?”, „Co dzieje się, gdy lot jest pełny?” oraz „Czy
+standardowy pasażer powinien zobaczyć konkretny komunikat?”. Odpowiedzi
+pomagają zespołowi zapisać scenariusz, który jest zrozumiały zarówno dla
+biznesu, jak i dla osoby automatyzującej test.
+
 ### Od potrzeby do przykładu
 
 Zdanie „lot premium ma obsługiwać VIP” jest dopiero hipotezą wymagania. Aby
