@@ -7,6 +7,45 @@
 Nauczyć się zapisywać wymagania jako wykonywalne przykłady zrozumiałe dla
 biznesu i zespołu technicznego.
 
+## Idea Gherkina
+
+Gherkin jest językiem opisu zachowania systemu. Łączy trzy cele:
+
+1. **rozmowę** - Customer, BA, Developer i Tester mogą przeczytać ten sam
+   przykład i sprawdzić, czy rozumieją wymaganie tak samo,
+2. **specyfikację** - scenariusz zapisuje konkretną regułę biznesową, a nie
+   ogólną obietnicę typu „system obsługuje VIP”,
+3. **automatyzację** - kroki mogą zostać połączone z kodem step definitions,
+   więc przykład może stać się testem wykonywanym przez `behave`.
+
+Gherkin nie jest językiem programowania i nie opisuje algorytmu. Nie mówi, czy
+system ma użyć klasy `PremiumFlight`, słownika czy bazy SQL. Mówi, co
+użytkownik lub operator może zaobserwować. Dzięki temu scenariusz pozostaje
+stabilny, nawet gdy implementacja wewnętrzna zostanie zmieniona.
+
+### Od potrzeby do przykładu
+
+Zdanie „lot premium ma obsługiwać VIP” jest dopiero hipotezą wymagania. Aby
+powstał dobry scenariusz, doprecyzuj:
+
+- **kto** wykonuje operację,
+- **jaki konkretny stan** istnieje przed operacją,
+- **co dokładnie** robi użytkownik,
+- **jaki widoczny rezultat** potwierdza sukces albo odrzucenie,
+- **jakie dane** odróżniają ten przypadek od innych.
+
+Porównanie:
+
+```text
+Nieprecyzyjnie: System obsługuje VIP.
+
+Precyzyjnie: Gdy operator dodaje pasażera VIP do lotu premium z wolnym
+miejscem, pasażer pojawia się na liście pasażerów.
+```
+
+Druga wersja ma aktora, warunek początkowy, akcję i obserwowalny rezultat.
+Można ją omówić z biznesem, a później zapisać jako `Given/When/Then`.
+
 ## Składnia
 
 ![Ścieżka wykonywania scenariusza: Feature i kroki Gherkina są mapowane przez Behave na step definitions, model domenowy i sprawdzany rezultat.](../03-behave-structure/diagrams/gherkin-execution.svg)
@@ -33,6 +72,103 @@ Feature: Lot premium
 - `Then` - obserwowalny rezultat,
 - `And` - kolejny krok tej samej fazy,
 - `Scenario Outline` + `Examples` - ten sam scenariusz dla wielu danych.
+
+`Given`, `When` i `Then` opisują sens kroku, a nie tylko jego kolejność:
+
+- `Given` odpowiada na pytanie: „co musi być prawdą przed rozpoczęciem?”,
+- `When` opisuje jedną akcję aktora lub systemu, która uruchamia zachowanie,
+- `Then` opisuje rezultat, który można zaobserwować z zewnątrz.
+
+`And` i `But` poprawiają czytelność, ale dziedziczą znaczenie poprzedniego
+rodzaju kroku. Po `Given` kolejne `And` nadal buduje kontekst; po `Then`
+kolejne `And` nadal opisuje rezultat.
+
+Przykład dwóch różnych rezultatów:
+
+```gherkin
+Scenario: VIP zostaje dodany do lotu premium
+  Given lot premium "PR100" ma wolne miejsce
+  And pasażer "Alice" ma status VIP
+  When operator dodaje pasażera "Alice" do lotu
+  Then pasażer "Alice" jest widoczny na liście lotu
+
+Scenario: Standardowy pasażer zostaje odrzucony
+  Given lot premium "PR100" ma wolne miejsce
+  And pasażer "Bob" ma status STANDARD
+  When operator dodaje pasażera "Bob" do lotu
+  Then operator widzi komunikat "only VIP passengers"
+  And pasażer "Bob" nie jest na liście lotu
+```
+
+Pierwszy scenariusz opisuje sukces, a drugi zabezpiecza regułę negatywną.
+Oba są krótkie, używają tych samych pojęć domenowych i nie ujawniają nazw
+metod ani pól obiektów.
+
+## Szkic scenariusza i formalna specyfikacja
+
+Przed zapisaniem Gherkina warto przygotować krótki szkic w języku rozmowy:
+
+```text
+Cel: chronić ofertę premium przed nieuprawnionym pasażerem.
+Aktor: operator lotu.
+Początek: istnieje lot premium PR200 z wolnym miejscem,
+          a Alice jest pasażerem standardowym.
+Akcja: operator próbuje dodać Alice do lotu.
+Rezultat: operacja zostaje odrzucona, Alice nie trafia na listę,
+          a operator otrzymuje jasny komunikat.
+```
+
+Szkic nie jest jeszcze testem. Pomaga uzgodnić regułę z biznesem i znaleźć
+brakujące informacje. Po uzgodnieniu można zapisać formalną specyfikację:
+
+```gherkin
+@premium @negative
+Feature: Ochrona dostępu do lotu premium
+  Aby oferta premium była dostępna tylko dla uprawnionych osób
+  Jako operator lotu
+  Chcę odrzucać standardowych pasażerów
+
+  Scenario: Standardowy pasażer nie zostaje dodany do lotu premium
+    Given lot premium "PR200" ma wolne miejsce
+    And pasażer "Alice" ma status "STANDARD"
+    When operator dodaje pasażera "Alice" do lotu
+    Then operacja zostaje odrzucona
+    And operator widzi komunikat "only VIP passengers"
+    And pasażer "Alice" nie jest na liście lotu
+```
+
+### Dlaczego ta specyfikacja jest użyteczna?
+
+- `Feature` wyjaśnia wartość biznesową i rolę operatora.
+- `Scenario` wybiera jeden konkretny przykład, zamiast mieszać kilka reguł.
+- `Given` przygotowuje tylko dane potrzebne do tego przykładu.
+- `When` opisuje działanie operatora, a nie wywołanie metody Pythona.
+- `Then` sprawdza trzy konsekwencje widoczne dla użytkownika: odrzucenie,
+  komunikat i brak pasażera na liście.
+- Tag `@premium` pozwala później uruchomić scenariusze wybranej funkcji,
+  a `@negative` wyróżnia przypadki odrzucenia.
+
+### Kiedy użyć `Scenario Outline`?
+
+Jeśli reguła jest taka sama, a zmieniają się tylko dane i wynik, nie kopiuj
+kilku niemal identycznych scenariuszy. Użyj tabeli przykładów:
+
+```gherkin
+Scenario Outline: Dostęp do lotu premium zależy od statusu
+  Given lot premium "PR300" ma wolne miejsce
+  And pasażer "Alex" ma status "<status>"
+  When operator dodaje pasażera "Alex" do lotu
+  Then operacja jest "<result>"
+
+  Examples:
+    | status   | result     |
+    | VIP      | zaakceptowana |
+    | STANDARD | odrzucona     |
+```
+
+Outline nie służy do ukrywania różnych reguł w jednej tabeli. Jeżeli przykłady
+mają inne akcje albo inne znaczenie biznesowe, lepiej napisać dwa osobne
+scenariusze.
 
 ```gherkin
 Scenario Outline: Punkty promocyjne zależą od statusu
@@ -64,6 +200,18 @@ flowchart TB
 - używają języka domeny,
 - mają konkretny rezultat,
 - nie ukrywają wielu akcji w jednym `When`.
+
+Dodatkowe wskazówki:
+
+- używaj nazw domenowych (`pasażer`, `lot premium`, `status VIP`), a nie
+  technicznych (`obiekt`, `fixture`, `endpoint`),
+- podawaj dane tylko wtedy, gdy wpływają na wynik,
+- nie twórz scenariusza z dziesięcioma krokami przygotowującymi; wyodrębnij
+  wspólny kontekst albo uprość przykład,
+- nie asertywuj logów, wywołań prywatnych metod ani rozmiaru wewnętrznej
+  kolekcji, jeśli użytkownik tego nie widzi,
+- komunikat błędu powinien być częścią scenariusza tylko wtedy, gdy jest
+  kontraktem ważnym dla operatora lub użytkownika.
 
 Zły scenariusz:
 
