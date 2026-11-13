@@ -1,8 +1,5 @@
 """Przykładowe rozwiązania zadań z tematu Język Gherkin."""
 
-from __future__ import annotations
-
-
 ECONOMY_FEATURE = """\
 Feature: Dodawanie pasażerów do lotu ekonomicznego
   Aby sprawnie zarządzać zwykłymi rejsami
