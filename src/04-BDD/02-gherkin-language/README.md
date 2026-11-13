@@ -276,6 +276,53 @@ Then pasażer jest na liście pasażerów lotu
 3. Dlaczego prywatne pole w `Then` łamie ideę BDD?
 4. Jak scenariusz pomaga BA i developerowi rozmawiać o tym samym wymaganiu?
 
+## Odpowiedzi na pytania kontrolne
+
+### 1. Kiedy użyć `Scenario Outline`?
+
+`Scenario Outline` stosujemy wtedy, gdy jedna reguła biznesowa ma być
+sprawdzona dla kilku zestawów danych, a układ kroków i oczekiwane zachowanie
+pozostają takie same. Zmienne zapisujemy w `<nawiasach>`, a konkretne wartości
+umieszczamy w tabeli `Examples`.
+
+Przykładem jest sprawdzenie dostępu do lotu premium dla statusów `VIP` i
+`STANDARD`. Nie należy używać `Scenario Outline` do łączenia różnych reguł,
+które mają inne akcje albo inne znaczenie biznesowe. Wtedy czytelniejsze będą
+osobne scenariusze.
+
+### 2. Czym różni się `Given` od `When`?
+
+`Given` opisuje warunki początkowe, czyli stan przygotowany przed wykonaniem
+akcji. Przykład: „lot premium ma wolne miejsce” oraz „Alice ma status VIP”.
+
+`When` opisuje działanie, które uruchamia testowane zachowanie. Przykład:
+„operator dodaje Alice do lotu”. Zwykle scenariusz powinien mieć jedną główną
+akcję `When`, aby było jasne, co spowodowało opisany rezultat.
+
+### 3. Dlaczego prywatne pole w `Then` łamie ideę BDD?
+
+Prywatne pole, takie jak `_passengers`, jest szczegółem implementacji, a nie
+zachowaniem obserwowalnym przez użytkownika. Test opisujący jego rozmiar może
+przestać działać po zmianie reprezentacji danych, mimo że funkcja biznesowa
+nadal działa poprawnie.
+
+Zamiast tego należy opisać rezultat domenowy, np. „pasażer jest widoczny na
+liście lotu” albo „pasażer nie został dodany”. Taki zapis chroni kontrakt
+biznesowy, a nie konkretną strukturę klasy.
+
+### 4. Jak scenariusz pomaga BA i developerowi rozmawiać o tym samym wymaganiu?
+
+Scenariusz zamienia ogólne wymaganie na konkretny przykład z warunkiem
+początkowym, akcją i oczekiwanym rezultatem. BA może sprawdzić, czy opis
+odpowiada regule biznesowej, a developer może na jego podstawie rozpoznać
+kontrakt, który trzeba zaimplementować.
+
+Wspólny zapis ujawnia też niejasności przed napisaniem kodu. Na przykład
+rozmowa o scenariuszu lotu premium może doprecyzować, co dzieje się dla
+pasażera standardowego, przy pełnym locie albo przy próbie dodania duplikatu.
+Później ten sam scenariusz może zostać uruchomiony jako test, więc pozostaje
+wspólnym dokumentem biznesu i zespołu technicznego.
+
 ## Literatura
 
 - Cucumber Docs - Gherkin Reference: <https://cucumber.io/docs/gherkin/reference>
