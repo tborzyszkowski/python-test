@@ -108,6 +108,53 @@ rozwiązań. Plik rozwiązań można także obejrzeć bezpośrednio:
 3. Co oznacza Outside-In?
 4. Kiedy tester powinien wejść do rozmowy o wymaganiu?
 
+## Odpowiedzi na pytania kontrolne
+
+### 1. Czym różni się Feature od Capability?
+
+**Capability** to szersza możliwość systemu, która wspiera cel biznesowy.
+Przykładem jest „system rozpoznaje typ lotu i status pasażera”.
+
+**Feature** to konkretny, widoczny dla użytkownika fragment tej możliwości,
+który można opisać scenariuszami akceptacji. Przykładem jest „lot premium
+przyjmuje tylko pasażerów VIP”. Jedna capability może obejmować wiele features.
+
+### 2. Dlaczego przykład jest lepszy niż ogólne „system ma obsługiwać VIP”?
+
+Ogólne wymaganie nie określa, kto wykonuje operację, jakie dane wejściowe są
+ważne ani jaki rezultat jest oczekiwany. Konkretny przykład, np. „dla lotu
+premium operator dodaje Alice ze statusem VIP, a Alice zostaje dodana”, usuwa
+niejednoznaczność i może stać się scenariuszem `Given/When/Then`.
+
+Przykłady ujawniają również przypadki brzegowe: pasażera standardowego,
+duplikat albo brak miejsca. Dzięki temu Customer, BA, Developer i Tester
+rozmawiają o tym samym zachowaniu, a nie o różnych interpretacjach hasła
+„obsługa VIP”.
+
+### 3. Co oznacza Outside-In?
+
+Outside-In oznacza projektowanie i implementowanie systemu od zachowania
+zewnętrznego do środka:
+
+1. zaczynamy od wartości biznesowej i scenariusza akceptacji,
+2. ustalamy kontrakt aplikacji widoczny dla użytkownika lub operatora,
+3. schodzimy do serwisu aplikacyjnego i obiektów domenowych,
+4. dopiero na końcu wydzielamy wewnętrzne reguły i komponenty techniczne.
+
+Podejście chroni przed rozpoczęciem pracy od klas i metod, które nie
+odpowiadają na rzeczywistą potrzebę biznesową. Testy jednostkowe są ważne, ale
+powinny wspierać zachowanie potwierdzone przykładem zewnętrznym.
+
+### 4. Kiedy tester powinien wejść do rozmowy o wymaganiu?
+
+Tester powinien uczestniczyć od początku, przed implementacją. Wspólnie z
+Customerem, BA i Developerem pomaga doprecyzować kryteria akceptacji, pytania
+„co jeśli?” oraz dane brzegowe.
+
+Nie chodzi wyłącznie o późniejsze znalezienie błędu. Tester może wcześniej
+ujawnić niejasność, np. czy powtórne dodanie tego samego pasażera jest błędem,
+oraz pomóc zapisać ją jako jednoznaczny przykład i automatyzowalny scenariusz.
+
 ## Literatura
 
 - Dan North, *Introducing BDD*: <https://dannorth.net/introducing-bdd/>
