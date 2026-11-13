@@ -456,6 +456,147 @@ konfigurację terminala lub polecenie `python -m behave`.
 4. Dlaczego logika biznesowa nie powinna być zakodowana wyłącznie w steps?
 5. Kiedy użyć hooka `before_scenario`?
 
+## Rozszerzone odpowiedzi na pytania kontrolne
+
+### 1. Jak Behave znajduje pliki `.feature`?
+
+Behave traktuje wskazany katalog jako katalog features. Na przykład polecenie:
+
+```powershell
+python -m behave src\04-BDD\03-behave-structure\examples\features
+```
+
+powoduje wyszukanie w tym katalogu plików `.feature`. Zawartość tych plików
+jest parsowana jako `Feature`, `Scenario`, `Scenario Outline` i kroki.
+Następnie Behave ładuje `environment.py` oraz moduły Python z podkatalogu
+`features\steps`.
+
+Nie wystarczy umieścić pliku z krokami obok pliku `.feature`. Behave szuka
+definicji w konwencjonalnym katalogu `steps`; dlatego w przykładzie plik
+[flight_steps.py](examples/features/steps/flight_steps.py) znajduje się
+właśnie w `features/steps`.
+
+Po znalezieniu scenariusza Behave porównuje tekst każdego kroku z wzorcami
+zarejestrowanymi przez dekoratory `@given`, `@when` i `@then`. Jeżeli wzorca
+brakuje, krok jest oznaczony jako undefined. Jeżeli pasuje więcej niż jeden
+wzorzec, trzeba usunąć niejednoznaczność. `--dry-run` jest przydatny do
+sprawdzenia mapowania kroków, ale nie wykonuje ich logiki.
+
+### 2. Jak placeholder Gherkina trafia do funkcji kroku?
+
+Placeholder jest częścią wzorca dekoratora. Przykład:
+
+```python
+@given('istnieje lot "{number}" z {capacity:d} miejscami')
+def create_flight(context, number: str, capacity: int) -> None:
+    context.flight = Flight(number, capacity)
+```
+
+Dla kroku:
+
+```gherkin
+Given istnieje lot "EC-DEMO" z 2 miejscami
+```
+
+Behave wywoła funkcję mniej więcej tak:
+
+```python
+create_flight(context, number="EC-DEMO", capacity=2)
+```
+
+Tekst w cudzysłowie jest pobierany jako napis, a konwerter `:d` zamienia
+parametr na liczbę całkowitą. Dzięki temu step definition może od razu
+przekazać `capacity` do modelu domeny. Warto pamiętać, że nazwa placeholdera
+oraz nazwa argumentu funkcji muszą odpowiadać sobie semantycznie; dodatkowe
+argumenty funkcji nie zostaną automatycznie uzupełnione.
+
+Parametry `Scenario Outline`, takie jak `<status>` i `<points>`, są najpierw
+podstawiane wartościami z wiersza `Examples`, a dopiero później cały krok jest
+dopasowywany do dekoratora. Tabela scenariusza działa inaczej: jej dane są
+dostępne w `context.table`.
+
+### 3. Do czego służy `context`?
+
+`context` jest obiektem przekazywanym przez Behave do hooków i funkcji kroków.
+Służy do przekazania stanu scenariusza między krokami:
+
+1. `Given` zapisuje lot w `context.flight`,
+2. kolejny `Given` zapisuje pasażerów w `context.passengers`,
+3. `When` odczytuje te obiekty i wywołuje operację,
+4. `Then` odczytuje wynik albo błąd i wykonuje asercję.
+
+W przykładzie:
+
+```python
+context.flight = Flight(number, capacity)
+context.passengers[name] = Passenger(name, status)
+context.error = error
+```
+
+`context` ma zakres scenariusza. Nie powinien zastępować bazy danych,
+globalnego cache ani modułu konfiguracyjnego. Nie należy też zakładać, że
+atrybut ustawiony w jednym scenariuszu będzie dostępny w następnym. Wspólny
+techniczny zasób można przygotować w hooku, ale dane konkretnego przykładu
+powinny być widoczne w `Given`.
+
+### 4. Dlaczego logika biznesowa nie powinna być zakodowana wyłącznie w steps?
+
+Step definition jest adapterem między językiem Gherkina a kodem domeny. Jeżeli
+zakodujemy w nim regułę, np. „tylko VIP może wejść na lot”, otrzymamy logikę
+dostępną tylko podczas uruchamiania Behave. Inny klient aplikacji może wtedy
+ominąć tę regułę, a test akceptacyjny może dawać fałszywe poczucie
+bezpieczeństwa.
+
+Złe rozwiązanie:
+
+```python
+if not context.passenger.vip:
+    context.error = "only VIP passengers"
+else:
+    context.flight.passengers.append(context.passenger)
+```
+
+Lepsze rozwiązanie deleguje decyzję do modelu:
+
+```python
+try:
+    context.flight.add_passenger(context.passenger)
+except FlightError as error:
+    context.error = error
+```
+
+Wtedy `Flight` może być użyty przez aplikację i test jednostkowy, a Behave
+sprawdza tylko zewnętrzne zachowanie. Step definition pozostaje krótki,
+czytelny i mniej podatny na duplikowanie reguł.
+
+### 5. Kiedy użyć hooka `before_scenario`?
+
+`before_scenario` należy stosować do przygotowania technicznego stanu przed
+każdym scenariuszem, np.:
+
+- wyzerowania obiektów w `context`,
+- utworzenia klienta testowego lub połączenia z bazą,
+- ustawienia wspólnej konfiguracji,
+- zapisania metadanych potrzebnych raportowi.
+
+Przykład:
+
+```python
+def before_scenario(context, scenario):
+    context.flight = None
+    context.passengers = {}
+    context.error = None
+```
+
+Nie powinno się umieszczać w nim całego zachowania biznesowego, np. dodawania
+konkretnej Alice do lotu. Taki warunek przestałby być widoczny w pliku
+`.feature`, a scenariusz straciłby wartość dokumentacyjną.
+
+Jeżeli zasób trzeba zwolnić, pasuje do tego `after_scenario`, np. zamknięcie
+połączenia lub usunięcie danych testowych. Hook jest właściwy także wtedy, gdy
+każdy scenariusz musi mieć czysty stan; nie należy jednak używać go do
+ukrywania zależności między scenariuszami.
+
 ## Literatura
 
 - Behave Documentation: <https://behave.readthedocs.io/en/latest/>
