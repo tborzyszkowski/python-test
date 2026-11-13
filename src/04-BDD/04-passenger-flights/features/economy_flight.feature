@@ -29,3 +29,13 @@ Feature: Lot ekonomiczny
     And pasażer "Alice" jest na locie
     When ponownie dodaję pasażera "Alice" do lotu
     Then operacja jest odrzucona komunikatem "passenger already on flight"
+
+  Scenario: Operator dodaje pasażerów z tabeli
+    Given istnieje lot ekonomiczny o numerze "EC104"
+    And pasażerowie są zdefiniowani w tabeli:
+      | name  | status   |
+      | Alice | STANDARD |
+      | Sara  | STUDENT  |
+    When dodaję wszystkich pasażerów z tabeli do lotu
+    Then lot ma 2 pasażerów
+    And pasażer "Sara" jest na locie

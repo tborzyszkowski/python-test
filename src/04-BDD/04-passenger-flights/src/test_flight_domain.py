@@ -43,3 +43,14 @@ def test_bonus_points_depend_on_vip_status():
     flight = EconomyFlight("EC1", mileage=1000)
     assert flight.bonus_points(Passenger("VIP", vip=True)) == 100
     assert flight.bonus_points(Passenger("Standard")) == 50
+
+
+def test_student_bonus_points_use_student_rate():
+    flight = EconomyFlight("EC1", mileage=1000)
+
+    assert flight.bonus_points(Passenger("Sara", status="STUDENT")) == 66
+
+
+def test_explicit_status_keeps_passenger_status_consistent_with_vip_flag():
+    assert Passenger("Victor", status="VIP").vip is True
+    assert Passenger("Sara", status="STUDENT").vip is False

@@ -21,6 +21,13 @@ class PassengerNotAllowedError(FlightError):
 class Passenger:
     name: str
     vip: bool = False
+    status: str | None = None
+
+    def __post_init__(self) -> None:
+        """Utrzymuje zgodność statusu z dawnym argumentem `vip`."""
+        status = (self.status or ("VIP" if self.vip else "STANDARD")).upper()
+        object.__setattr__(self, "status", status)
+        object.__setattr__(self, "vip", status == "VIP")
 
 
 class Flight:
@@ -52,7 +59,7 @@ class Flight:
         return name in self._passengers
 
     def bonus_points(self, passenger: Passenger) -> int:
-        divisor = 10 if passenger.vip else 20
+        divisor = {"VIP": 10, "STUDENT": 15}.get(passenger.status, 20)
         return self.mileage // divisor
 
     @property

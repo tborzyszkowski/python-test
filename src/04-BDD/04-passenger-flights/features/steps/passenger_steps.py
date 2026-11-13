@@ -81,7 +81,7 @@ def operation_rejected(context, message: str) -> None:
 
 @given('pasażer "{name}" ma status "{status}"')
 def points_passenger(context, name: str, status: str) -> None:
-    context.passengers = {name: Passenger(name, vip=status.upper() == "VIP")}
+    context.passengers = {name: Passenger(name, status=status)}
 
 
 @given('przebieg lotu wynosi {mileage:d} kilometrów')
@@ -98,3 +98,22 @@ def calculate_points(context, name: str) -> None:
 @then('pasażer otrzymuje {points:d} punktów')
 def points_result(context, points: int) -> None:
     assert context.points == points
+
+
+@given("pasażerowie są zdefiniowani w tabeli:")
+def passengers_from_table(context) -> None:
+    context.passengers = {
+        row["name"]: Passenger(row["name"], status=row["status"])
+        for row in context.table
+    }
+
+
+@when("dodaję wszystkich pasażerów z tabeli do lotu")
+def add_passengers_from_table(context) -> None:
+    for passenger in context.passengers.values():
+        context.flight.add_passenger(passenger)
+
+
+@then("lot ma {count:d} pasażerów")
+def passenger_count(context, count: int) -> None:
+    assert len(context.flight.passengers) == count
