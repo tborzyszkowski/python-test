@@ -38,6 +38,230 @@ Wynik Then powinien sprawdzać obserwowalne zachowanie, nie prywatne pola.
 
 ![Przepływ wykonania Gherkina przez Behave, step definitions i model domeny.](diagrams/gherkin-execution.svg)
 
+## Jak Behave znajduje i wykonuje scenariusz?
+
+Behave rozpoczyna pracę w katalogu `features`. Wyszukuje pliki z rozszerzeniem
+`.feature`, odczytuje ich `Feature`, `Scenario` i kroki, a następnie ładuje
+Pythonowe pliki z katalogu `features/steps`. Dekoratory `@given`, `@when` i
+`@then` rejestrują wzorce, które Behave porównuje z tekstem kroków.
+
+Dla scenariusza:
+
+```gherkin
+Given istnieje lot ekonomiczny o numerze "EC100"
+When dodaję pasażera "Alice" do lotu
+```
+
+Behave wykonuje kolejno funkcje podobne do tych:
+
+```python
+@given('istnieje lot ekonomiczny o numerze "{number}"')
+def economy_flight(context, number: str) -> None:
+    context.flight = EconomyFlight(number, mileage=1000)
+
+
+@when('dodaję pasażera "{name}" do lotu')
+def add_passenger(context, name: str) -> None:
+    context.flight.add_passenger(context.passengers[name])
+```
+
+Tekst w cudzysłowie jest parametrem. W pierwszym kroku `number` otrzyma
+wartość `"EC100"`, a w drugim `name` otrzyma `"Alice"`. Funkcja kroku nie
+jest wywoływana ręcznie z pliku `.feature`; wywołuje ją runner Behave po
+dopasowaniu dekoratora.
+
+Kolejność wykonania jednego scenariusza:
+
+1. Behave tworzy kontekst scenariusza.
+2. Uruchamia hooki, np. `before_scenario`.
+3. Wykonuje kroki `Given`, `When` i `Then` w kolejności z pliku.
+4. Przekazuje parametry z tekstu do funkcji step definition.
+5. Zatrzymuje scenariusz po błędzie kroku i raportuje miejsce awarii.
+6. Uruchamia hooki sprzątające, np. `after_scenario`.
+
+## Rola poszczególnych plików
+
+### Plik `.feature`
+
+Zawiera język biznesowy i przykłady. Nie powinien importować Pythona ani
+wyjaśniać, jak przechowywana jest lista pasażerów.
+
+```gherkin
+Feature: Lot premium
+
+  Scenario: VIP może wejść na lot
+    Given istnieje lot premium o numerze "PR100"
+    And istnieje pasażer VIP "Victor"
+    When dodaję pasażera "Victor" do lotu
+    Then pasażer "Victor" jest na locie
+```
+
+### `features/steps/`
+
+Zawiera cienką warstwę adaptera. Step definition tłumaczy zdanie Gherkina na
+wywołanie domeny, ale nie powinien sam implementować reguły „tylko VIP może
+wejść na lot premium”.
+
+```python
+@then('pasażer "{name}" jest na locie')
+def passenger_is_on_flight(context, name: str) -> None:
+    assert context.flight.has_passenger(name)
+```
+
+Reguła dostępu należy do `PremiumFlight`, dzięki czemu może być użyta również
+przez kod aplikacji albo zwykły test jednostkowy, bez uruchamiania Behave.
+
+### `environment.py`
+
+To miejsce na konfigurację cyklu życia testów: ścieżkę do kodu, klienta API,
+połączenie z bazą, raportowanie i sprzątanie. Nie należy przenosić do hooków
+całej logiki scenariusza, bo wtedy jego warunki przestają być widoczne w
+pliku `.feature`.
+
+```python
+def before_scenario(context, scenario):
+    context.flight = None
+    context.error = None
+
+
+def after_scenario(context, scenario):
+    if scenario.status == "failed":
+        print(f"Nieudany scenariusz: {scenario.name}")
+```
+
+Hook `before_scenario` przygotowuje wspólny techniczny kontekst, natomiast
+konkretne dane biznesowe, np. numer lotu i pasażera, powinny zwykle pojawić
+się w krokach `Given`.
+
+### `context` - pamięć jednego scenariusza
+
+`context` jest obiektem przekazywanym do hooków i wszystkich funkcji kroków.
+Pozwala przekazać wynik z `Given` do `When`, a następnie do `Then`:
+
+```python
+@given('istnieje pasażer VIP "{name}"')
+def vip_passenger(context, name: str) -> None:
+    context.passenger = Passenger(name, vip=True)
+
+
+@when('dodaję pasażera do lotu')
+def add_passenger(context) -> None:
+    context.flight.add_passenger(context.passenger)
+
+
+@then('pasażer jest na locie')
+def passenger_is_on_flight(context) -> None:
+    assert context.flight.has_passenger(context.passenger.name)
+```
+
+`context` nie jest globalnym magazynem. Behave tworzy izolowany kontekst dla
+scenariusza, dlatego dane jednego scenariusza nie powinny wpływać na następny.
+Jeśli kilka kroków potrzebuje wielu pasażerów, czytelniej jest użyć jawnego
+`context.passengers` jako słownika zainicjalizowanego w `Given`.
+
+## Parametry i dopasowanie kroków
+
+Behave może przekazywać parametry jako tekst albo konwertować je za pomocą
+matchera:
+
+```python
+@given('przebieg lotu wynosi {mileage:d} kilometrów')
+def mileage(context, mileage: int) -> None:
+    context.flight = EconomyFlight("POINTS", mileage=mileage)
+```
+
+`{mileage:d}` oznacza liczbę całkowitą, więc krok
+`Given przebieg lotu wynosi 1000 kilometrów` przekazuje `1000`, a nie `"1000"`.
+Bez konwersji krok musiałby sam wykonać `int(mileage)`.
+
+Dla danych tabelarycznych można użyć tabeli Gherkina:
+
+```gherkin
+Given lot ma następujących pasażerów:
+  | name  | status   |
+  | Alice | STANDARD |
+  | Victor| VIP      |
+```
+
+```python
+@given("lot ma następujących pasażerów:")
+def passengers_table(context) -> None:
+    context.passengers = {
+        row["name"]: Passenger(row["name"], vip=row["status"] == "VIP")
+        for row in context.table
+    }
+```
+
+Tabela jest dobrym rozwiązaniem, gdy wiele wierszy należy do jednego
+kontekstu. Nie należy używać jej do ukrywania kilku niezależnych zachowań w
+jednym kroku.
+
+## Tagi i wybieranie scenariuszy
+
+Tagi pozwalają uruchomić fragment zestawu:
+
+```gherkin
+@premium @negative
+Scenario: Standardowy pasażer nie może wejść na lot premium
+  ...
+```
+
+```powershell
+python -m behave --tags=@premium
+python -m behave --tags="@premium and not @slow"
+```
+
+Tag `@premium` może oznaczać funkcję biznesową, a `@slow` test wymagający
+zewnętrznego zasobu. Tag nie zastępuje dobrej nazwy scenariusza i nie powinien
+być używany do ukrywania niepewnych testów.
+
+## Typowe błędy i lepsze rozwiązania
+
+### Zbyt techniczny krok
+
+```gherkin
+When wywołuję metodę add_passenger z obiektem Passenger
+Then lista _passengers ma długość 1
+```
+
+Lepsza wersja opisuje działanie operatora i rezultat domenowy:
+
+```gherkin
+When operator dodaje pasażera do lotu
+Then pasażer jest widoczny na liście lotu
+```
+
+### Logika biznesowa w step definition
+
+Nie należy implementować reguły w kroku:
+
+```python
+@when('dodaję pasażera VIP do lotu')
+def add_vip(context):
+    if not context.passenger.vip:
+        context.error = "only VIP passengers"
+    else:
+        context.flight.passengers.append(context.passenger)
+```
+
+To omija model domeny i może sprawić, że test przejdzie mimo błędu produkcyjnej
+klasy. Lepszy krok wywołuje publiczną operację:
+
+```python
+@when('dodaję pasażera do lotu')
+def add_passenger(context):
+    try:
+        context.flight.add_passenger(context.passenger)
+    except FlightError as error:
+        context.error = error
+```
+
+### Stan tworzony w `Then`
+
+`Then` powinien sprawdzać wynik operacji wykonanej w `When`, a nie wykonywać ją
+ponownie. Jeśli `Then` sam dodaje pasażera albo tworzy nowy lot, test może
+potwierdzać stan przygotowany przez asercję, a nie prawdziwe zachowanie.
+
 ```powershell
 Push-Location src\04-BDD\04-passenger-flights
 ..\..\..\.venv\Scripts\python.exe -m behave -f pretty
@@ -82,6 +306,133 @@ def before_scenario(context, scenario):
 - definicja kroku powinna być krótka, logika należy do domeny,
 - nie twórz nowych obiektów w `Then`, jeśli wynik ma pochodzić z `When`,
 - `context` przechowuje dane jednego scenariusza.
+
+## Uruchamialna seria przykładów
+
+W katalogu [examples](examples) znajduje się mały projekt Behave, który można
+uruchomić niezależnie od większej domeny lotów:
+
+```text
+examples/
+├── flight_model.py
+└── features/
+    ├── basic_flight.feature
+    ├── advanced_flight.feature
+    ├── environment.py
+    └── steps/
+        └── flight_steps.py
+```
+
+### Przykład 1: minimalny przepływ `Given` → `When` → `Then`
+
+W [basic_flight.feature](examples/features/basic_flight.feature) `Given`
+tworzy lot i pasażera, `When` wywołuje operację domenową, a `Then` sprawdza
+liczbę pasażerów i ich obecność na liście. Dane utworzone w `Given` są
+przechowywane w `context.flight` oraz `context.passengers`.
+
+```gherkin
+Scenario: Operator dodaje pasażera do lotu
+  Given istnieje lot "EC-DEMO" z 2 miejscami
+  And pasażer "Alice" ma status "STANDARD"
+  When operator dodaje pasażera "Alice" do lotu
+  Then lot ma 1 pasażera
+  And pasażer "Alice" jest na liście
+```
+
+Odpowiadające kroki w
+[flight_steps.py](examples/features/steps/flight_steps.py) nie zawierają
+reguły pojemności lotu. Wywołują `Flight.add_passenger`, więc ten sam model
+może być testowany poza Behave.
+
+### Przykład 2: parametry konwertowane przed wywołaniem kroku
+
+Krok:
+
+```python
+@given('istnieje lot "{number}" z {capacity:d} miejscami i przebiegiem {mileage:d} km')
+def create_flight_with_mileage(context, number, capacity, mileage):
+    context.flight = Flight(number, capacity, mileage=mileage)
+```
+
+obsługuje tekst:
+
+```gherkin
+Given istnieje lot "EC-101" z 3 miejscami i przebiegiem 1000 km
+```
+
+Matcher `:d` przekazuje `capacity` i `mileage` jako `int`. Dzięki temu step
+definition nie musi ręcznie konwertować napisów przez `int(...)`.
+
+### Przykład 3: `Scenario Outline` używa tego samego kroku wiele razy
+
+W [advanced_flight.feature](examples/features/advanced_flight.feature) dwa
+wiersze tabeli uruchamiają tę samą sekwencję kroków dla innych statusów:
+
+```gherkin
+Scenario Outline: Punkty zależą od statusu pasażera
+  Given istnieje lot "<flight>" z 3 miejscami i przebiegiem <mileage> km
+  And pasażer "Alex" ma status "<status>"
+  When obliczam punkty dla pasażera "Alex"
+  Then pasażer otrzymuje <points> punktów
+
+  Examples:
+    | flight | mileage | status   | points |
+    | EC-101 | 1000    | STANDARD | 100    |
+    | EC-102 | 1000    | VIP      | 200    |
+```
+
+To nadal jest jeden kontrakt biznesowy. Zmieniają się tylko dane wejściowe i
+oczekiwany wynik; step definitions pozostają te same.
+
+### Przykład 4: tabela trafia do `context.table`
+
+Tabela Gherkina jest dostępna w kroku przez `context.table`:
+
+```python
+@given("lot ma następujących pasażerów:")
+def create_passengers_from_table(context):
+    context.passengers = {
+        row["name"]: Passenger(row["name"], row["status"])
+        for row in context.table
+    }
+```
+
+Każdy `row` zachowuje nazwy kolumn `name` i `status`. Tabela jest wygodna do
+przekazania wielu danych jednego rodzaju, ale nie powinna ukrywać wielu
+niezależnych akcji.
+
+### Przykład 5: hook izoluje scenariusze
+
+W [environment.py](examples/features/environment.py) `before_scenario`
+tworzy pusty stan:
+
+```python
+def before_scenario(context, scenario):
+    context.flight = None
+    context.passengers = {}
+    context.error = None
+```
+
+Każdy scenariusz zaczyna z własnym `context`, więc pasażerowie utworzeni w
+jednym scenariuszu nie przechodzą do następnego. `after_scenario` pokazuje
+miejsce, w którym można zwolnić klienta API, zamknąć połączenie albo zapisać
+informację o wyniku.
+
+### Uruchomienie przykładów
+
+Z katalogu repozytorium:
+
+```powershell
+.venv\Scripts\python.exe -m behave src\04-BDD\03-behave-structure\examples\features -f pretty
+.venv\Scripts\python.exe -m behave src\04-BDD\03-behave-structure\examples\features --tags=@structure
+```
+
+Pierwsze polecenie uruchamia wszystkie przykłady, a drugie filtruje je po
+tagu. `--dry-run` sprawdza dopasowanie kroków bez wykonywania logiki:
+
+```powershell
+.venv\Scripts\python.exe -m behave src\04-BDD\03-behave-structure\examples\features --dry-run
+```
 
 ## Uruchomienie i debugowanie
 
