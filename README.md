@@ -67,7 +67,8 @@ python -m venv .venv
 .venv\Scripts\python.exe -m pytest src\01-OOP -c src\01-OOP\pytest.ini -v
 .venv\Scripts\python.exe -m pytest src\02-TDD -c src\02-TDD\pytest.ini -v
 .venv\Scripts\python.exe -m pytest src\03-test_double -c src\03-test_double\pytest.ini -v
-.venv\Scripts\python.exe -m behave src\04-BDD\04-passenger-flights\features
+.venv\Scripts\python.exe -m pytest src\04-BDD -c src\04-BDD\pytest.ini -v
+.venv\Scripts\python.exe -m behave src\04-BDD\04-passenger-flights\features -f progress
 .venv\Scripts\python.exe -m pytest src\06-ArchTest -c src\06-ArchTest\pytest.ini -v
 .venv\Scripts\python.exe -m pytest src\05-Selenium -c src\05-Selenium\pytest.ini -v
 
@@ -131,12 +132,43 @@ folderu wystarczy:
 - [`src/03-test_double/README.md`](src/03-test_double/README.md) - taksonomia
   Dummy, Stub, Fake, Spy i Mock, asercje wartości/stanu/interakcji,
   `unittest.mock`, `monkeypatch` oraz izolowanie I/O i SSO.
-- [`src/04-BDD/README.md`](src/04-BDD/README.md) - BDD, Outside-In, Gherkin,
-  Behave oraz domena lotów ekonomicznych i premium.
+- [`src/04-BDD/README.md`](src/04-BDD/README.md) - pełna ścieżka BDD:
+  Outside-In, Gherkin, struktura Behave oraz domena lotów ekonomicznych i
+  premium z wykonywalnymi scenariuszami i rozwiązaniami ćwiczeń.
 - [`src/06-ArchTest/README.md`](src/06-ArchTest/README.md) - testowanie granic
   architektury przez `pytest-archon` i `import-linter`.
 - [`src/05-Selenium/README.md`](src/05-Selenium/README.md) - Selenium WebDriver,
   lokalizatory, waits, Page Object Model i pytest-html.
+
+## Jak pracować z modułem BDD
+
+Moduł `04-BDD` warto przechodzić od rozmowy o wartości do wykonywalnego
+scenariusza:
+
+1. przeczytaj [Outside-In](src/04-BDD/01-bdd-outside-in/README.md) i zapisz
+   aktora, cel oraz przykład biznesowy,
+2. zapisz przykład w [Gherkinie](src/04-BDD/02-gherkin-language/README.md),
+3. zobacz, jak Behave mapuje kroki w
+   [strukturze projektu](src/04-BDD/03-behave-structure/README.md),
+4. uruchom kompletną domenę
+   [passenger-flights](src/04-BDD/04-passenger-flights/README.md),
+5. porównaj scenariusz akceptacyjny z testem jednostkowym i rozwiązaniem
+   ćwiczenia.
+
+Z katalogu głównego można wykonać szybki przebieg całego modułu:
+
+```powershell
+.venv\Scripts\python.exe -m pytest src\04-BDD -c src\04-BDD\pytest.ini -v
+Push-Location src\04-BDD\04-passenger-flights
+..\..\..\.venv\Scripts\python.exe -m behave -f progress
+Pop-Location
+.venv\Scripts\python.exe -m ruff check src\04-BDD
+```
+
+`pytest` uruchamia testy jednostkowe domeny i testy rozwiązań. `behave`
+uruchamia pliki `.feature`, step definitions i model domeny jako przepływ
+akceptacyjny. Te polecenia sprawdzają różne warstwy i nie zastępują się
+wzajemnie.
 
 ## Jak wybrać temat na start?
 
@@ -156,9 +188,12 @@ Dla studentów, którzy znają już podstawy Pythona, polecana kolejność pracy
 12. **`03-test_double/01-test-double-taxonomy`** - role atrap testowych.
 13. **`03-test_double/03-racing-car-and-html`** - Stub czujnika i Fake `StringIO`.
 14. **`03-test_double/04-sso-registry`** - Spy i Mock w interakcji z rejestrem.
-15. **`04-BDD/04-passenger-flights`** - scenariusze Gherkin i Behave dla lotów.
-16. **`06-ArchTest/03-architecture-rules`** - izolacja domeny, warstwy, cykle i konwencje.
-17. **`05-Selenium/03-page-object-model`** - POM i testy browserowe E2E.
+15. **`04-BDD/01-bdd-outside-in`** - przejście od wartości biznesowej do przykładu i kodu.
+16. **`04-BDD/02-gherkin-language`** - składnia Gherkina, scenariusze, outline i tabele.
+17. **`04-BDD/03-behave-structure`** - mapowanie feature → steps → domena oraz `context`.
+18. **`04-BDD/04-passenger-flights`** - scenariusze Gherkin i Behave dla lotów.
+19. **`06-ArchTest/03-architecture-rules`** - izolacja domeny, warstwy, cykle i konwencje.
+20. **`05-Selenium/03-page-object-model`** - POM i testy browserowe E2E.
 
 Sugerowany rytm nauki:
 
@@ -230,6 +265,9 @@ python-test/
         ├── 02-gherkin-language/
         ├── 03-behave-structure/
         └── 04-passenger-flights/
+            ├── features/          # feature files, hooks i step definitions
+            ├── src/               # model domeny i testy jednostkowe
+            └── exercises/         # zadania, rozwiązania i testy rozwiązań
       └── 06-ArchTest/
         ├── README.md
         ├── pytest.ini
