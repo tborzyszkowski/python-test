@@ -263,6 +263,98 @@ Then pasażer jest na liście pasażerów lotu
 - `Then` powinien być możliwy do zaobserwowania przez użytkownika,
 - tabela `Examples` powinna zawierać tylko dane zmieniające wynik.
 
+## Przykładowe rozwiązania zadań
+
+Rozwiązania znajdują się w pliku
+[bdd_solutions_02.py](exercises/bdd_solutions_02.py), a ich podstawową strukturę
+sprawdzają testy w [test_bdd_solutions_02.py](exercises/test_bdd_solutions_02.py).
+Każda stała w pliku rozwiązania zawiera gotowy fragment Gherkina, więc można go
+skopiować do pliku `.feature` albo omówić przed podłączeniem step definitions.
+
+### 1. Feature dla lotu ekonomicznego
+
+Rozwiązanie zaczyna od wartości i roli operatora. `Given` opisuje wolne miejsce
+i konkretnego pasażera, `When` opisuje działanie operatora, a `Then` sprawdza
+rezultat widoczny w domenie. Nie ma tu nazwy klasy ani metody Pythona.
+
+```gherkin
+Feature: Dodawanie pasażerów do lotu ekonomicznego
+  Aby sprawnie zarządzać zwykłymi rejsami
+  Jako operator lotu
+  Chcę dodawać pasażerów do lotu ekonomicznego
+
+  Scenario: Standardowy pasażer zostaje dodany do lotu ekonomicznego
+    Given lot ekonomiczny "EC100" ma wolne miejsce
+    And pasażer "Alice" ma status "STANDARD"
+    When operator dodaje pasażera "Alice" do lotu
+    Then pasażer "Alice" jest widoczny na liście lotu
+```
+
+### 2. Trzy dane w `Scenario Outline`
+
+Jeśli zmieniają się tylko status i wynik, jeden outline jest czytelniejszy od
+trzech skopiowanych scenariuszy. Wszystkie wiersze wykonują tę samą akcję i
+sprawdzają tę samą regułę: tylko VIP może wejść na lot premium. Trzeci wiersz
+pokazuje, że reguła obejmuje także przyszły status `STUDENT`, bez dopisywania
+nowej logiki do scenariusza.
+
+```gherkin
+Scenario Outline: Status pasażera określa dostęp do lotu premium
+  Given lot premium "PR100" ma wolne miejsce
+  And pasażer "Alex" ma status "<status>"
+  When operator dodaje pasażera "Alex" do lotu
+  Then operacja jest "<result>"
+
+  Examples:
+    | status   | result       |
+    | VIP      | zaakceptowana |
+    | STANDARD | odrzucona     |
+    | STUDENT  | odrzucona     |
+```
+
+### 3. Usunięcie szczegółu implementacyjnego
+
+Wersja początkowa opisuje metodę `add_passenger` i prywatne pole
+`_passengers`. Taki test zna strukturę kodu, więc staje się kruchy przy zmianie
+implementacji. W poprawionej wersji operator wykonuje czynność biznesową, a
+`Then` sprawdza efekt widoczny na liście lotu.
+
+```gherkin
+# Przed refaktoryzacją
+When wywołuję metodę add_passenger z obiektem Passenger
+Then pole _passengers ma długość 1
+
+# Po refaktoryzacji
+When operator dodaje pasażera "Alice" do lotu
+Then pasażer "Alice" jest widoczny na liście lotu
+```
+
+Nie chodzi o zakaz używania testów jednostkowych sprawdzających stan obiektu.
+Taki szczegół może być uzasadniony wewnętrznym testem domeny, ale nie powinien
+być językiem scenariusza akceptacji dla biznesu.
+
+### 4. Scenariusz negatywny z komunikatem błędu
+
+Scenariusz negatywny dokumentuje nie tylko fakt odrzucenia operacji, ale także
+ważny kontrakt dla operatora: komunikat oraz brak niepożądanej zmiany. Trzy
+asercje należą do jednego rezultatu biznesowego i razem chronią regułę.
+
+```gherkin
+Scenario: Standardowy pasażer nie zostaje dodany do lotu premium
+  Given lot premium "PR200" ma wolne miejsce
+  And pasażer "Bob" ma status "STANDARD"
+  When operator dodaje pasażera "Bob" do lotu
+  Then operacja zostaje odrzucona
+  And operator widzi komunikat "only VIP passengers"
+  And pasażer "Bob" nie jest na liście lotu
+```
+
+Plik rozwiązań można uruchomić jako demonstrację:
+
+```powershell
+.venv\Scripts\python.exe src\04-BDD\02-gherkin-language\exercises\bdd_solutions_02.py
+```
+
 ## Uruchomienie
 
 ```bash
