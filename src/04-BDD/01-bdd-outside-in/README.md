@@ -82,9 +82,23 @@ kodem napisanym wyłącznie przez jedną osobę.
 
 ## Uruchomienie i debugowanie
 
-```bash
-python -m compileall src/04-BDD/01-bdd-outside-in
-python -m pytest src/04-BDD/01-bdd-outside-in -v
+```powershell
+.venv\Scripts\python.exe -m compileall src\04-BDD\01-bdd-outside-in
+.venv\Scripts\python.exe -m pytest src\04-BDD\01-bdd-outside-in -v
+```
+
+Tak — po dodaniu rozwiązań w tym temacie jest już kod Pythona:
+[bdd_solutions_01.py](exercises/bdd_solutions_01.py) zawiera modelowe odpowiedzi
+do zadań, a [test_bdd_solutions_01.py](exercises/test_bdd_solutions_01.py)
+sprawdza ich najważniejsze elementy.
+
+`compileall` nie kompiluje programu do osobnego pliku wykonywalnego. Python
+sprawdza składnię i może utworzyć pliki bytecode `.pyc`. W tym temacie jest to
+szybka kontrola poprawności składni, natomiast `pytest` uruchamia testy
+rozwiązań. Plik rozwiązań można także obejrzeć bezpośrednio:
+
+```powershell
+.venv\Scripts\python.exe src\04-BDD\01-bdd-outside-in\exercises\bdd_solutions_01.py
 ```
 
 ## Pytania kontrolne
